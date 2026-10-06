@@ -1,187 +1,233 @@
 # ⚡ ProjectPulse
-> **“Monitor. Manage. Deliver.”**  
-> Modern Integrated Enterprise Project Governance & Telemetry Workspace (24-Hour Hackathon Demo Edition)
+
+> **Monitor. Manage. Deliver.**
+> An AI-assisted project governance and telemetry workspace: track progress, budgets, risks and team workload from a single dashboard.
+
+![Node.js](https://img.shields.io/badge/Node.js-Express_5-339933?logo=node.js&logoColor=white)
+![SQLite](https://img.shields.io/badge/Database-SQLite-003B57?logo=sqlite&logoColor=white)
+![Chart.js](https://img.shields.io/badge/Charts-Chart.js-FF6384?logo=chartdotjs&logoColor=white)
+![JavaScript](https://img.shields.io/badge/Frontend-Vanilla_JS-F7DF1E?logo=javascript&logoColor=black)
+![License](https://img.shields.io/badge/License-MIT-blue)
 
 ---
 
 ## 📌 Problem Statement
-Modern enterprise initiatives and cross-functional technology teams often struggle with fragmented visibility across disparate tracking tools. Stakeholders, project managers, and engineers frequently experience:
-- **Blind spots in milestone schedules**, discovering roadblocks only after deadlines are breached.
-- **Unchecked financial burn rates**, resulting in mid-project budget exhaustion.
-- **Uneven team workload distribution**, triggering engineer burnout and critical path delays.
-- **Reactive rather than predictive risk management**, lacking proactive intelligence to prevent milestone slippage.
+
+Cross-functional teams often track work in disconnected tools, which leads to:
+
+- **Blind spots in milestones**: roadblocks are found only after deadlines are missed.
+- **Unchecked budget burn**: funds run out mid-project.
+- **Uneven workloads**: some engineers are overloaded while others have spare capacity.
+- **Reactive risk management**: problems are handled after they happen, not predicted.
+
+## 🎯 Objective
+
+ProjectPulse is a single-pane-of-glass platform that lets **Administrators, Project Creators, Project Managers and Team Members** monitor project health, inspect milestones, audit budgets, predict delays and act on mitigation playbooks, with an AI-style **PulseAI Copilot** to answer questions about any project.
 
 ---
 
-## 🎯 Project Objective
-**ProjectPulse** provides a centralized, single-pane-of-glass project monitoring platform. It empowers Administrators, Project Managers, and Team Members to track real-time project health, inspect milestone timelines, analyze financial efficiency, predict delivery delays using AI-styled analytics, and safeguard deadlines through automated mitigation playbooks.
+## 🚀 Features
+
+| Module | Page | What it does |
+|---|---|---|
+| **Landing page** | `landing.html` | Product overview and entry point to the app. |
+| **Authentication** | `login.html`, `register.html` | Role-based login and sign-up, with one-click demo profiles. |
+| **Executive Dashboard** | `index.html` | KPI cards (Total / Active / Completed / Delayed), planned-vs-actual progress chart, ongoing projects, alerts. |
+| **Project Portfolio** | `projects.html` | Search, status filter, create-project modal, project-folder selection (file count and tech stack detection). |
+| **Project Details** | `project-details.html` | Circular progress gauge, budget utilization, milestone roadmap, task tracker, *Update Progress* modal, report download, embedded Copilot. |
+| **Reports & Analytics** | `reports.html` | Project and time-range filters, line and doughnut charts, cross-project audit table, executive insights. |
+| **Risk Monitor** | `risk-monitor.html` | Risk scores (0–100), delay-probability prediction, risk filters, mitigation playbooks, *Run Smart Analysis*. |
+| **Team & Capacity** | `team.html` | Team KPIs, role filter and search, add-member modal, workload bars. |
+| **PulseAI Copilot** | `copilot.html` | Chat assistant for status, budget, risk and milestone questions about the selected project. |
+
+### Highlights
+
+- 🔌 **Backend-first with graceful fallback**: `api.js` talks to the REST API and SQLite database, and falls back to `localStorage` automatically if the server is offline.
+- 🔐 **JWT authentication** with role-scoped access (non-admins only see their own projects).
+- 🤖 **PulseAI Copilot** answers *status, budget, risk* and *milestone* queries, with a local analytics generator when the backend is unreachable.
+- 📊 **Interactive charts** built with Chart.js.
 
 ---
 
-## 🚀 Core Features
+## 🛠️ Tech Stack
 
-### 1. Modern Split-Screen Authentication (`login.html`)
-- Professional split-screen hero layout with gradient styling and feature showcase.
-- Demo authentication with quick auto-fill helper for hackathon judges.
-- Multi-role support: **Administrator**, **Project Manager**, **Team Member**.
-- State persistence in browser `localStorage`.
+**Frontend**
+- HTML5, CSS3 (custom design system with CSS variables, Grid and Flexbox)
+- Vanilla ES6 JavaScript with a shared API client (`api.js`)
+- [Chart.js](https://www.chartjs.org/) (CDN) for charts
+- [Google Fonts: Inter](https://fonts.google.com/specimen/Inter)
 
-### 2. Executive Dashboard (`index.html`)
-- KPI summary widgets: Total Projects (24), Active (18), Completed (5), Delayed (3).
-- **Chart.js** Line Chart: Planned Progress vs Actual Progress trajectory across 9 months.
-- Ongoing Projects telemetry panel with real-time progress bars and direct drill-down links.
-- Recent Tasks & Milestones table with priority badges.
-- Live alert notifications for delayed deliverables and budget limits.
+**Backend**
+- Node.js + Express 5 (REST API, static file hosting)
+- SQLite (embedded database)
+- `bcryptjs` for password hashing, `jsonwebtoken` for sessions, `cors`, `dotenv`
 
-### 3. Project Portfolio Management (`projects.html`)
-- Real-time search by project name or project code.
-- Dynamic status filtering: *All*, *In Progress*, *Completed*, *Delayed*, *Planned*.
-- Interactive **"Add New Project"** modal that generates and persists new projects to `localStorage`.
-- Comprehensive project cards displaying project codes, team size, target deadline, status badge, and progress bar.
-
-### 4. Deep Project Drill-Down (`project-details.html`)
-- Synchronized with active project selected from portfolio.
-- **Circular SVG progress meter** and overall completion indicator.
-- Financial audit metric: Budget used vs total allocated with color-coded utilization bar.
-- Five-stage **Milestone Roadmap Timeline** (Planning, UI/UX, Database/API, Dashboard, Testing/Deployment).
-- Interactive **"Update Progress"** modal that updates circular gauge and progress bars instantly in the DOM and `localStorage`.
-- Granular task tracker with assigned engineers, priority badges, and completion meters.
-
-### 5. Reports & Analytics (`reports.html`)
-- Filter by project selection and time horizon (Last 30 Days, Q1-Q2, Year-to-Date, Lifecycle).
-- Dual analytical visualizations using **Chart.js**:
-  - **Line Chart**: Planned vs Actual Milestone Delivery over 6 months.
-  - **Doughnut Chart**: Granular Task Status Distribution (Completed, In Progress, Delayed, Planned).
-- Cross-project performance audit table.
-- **Smart Executive Insights** panel highlighting budget risks, top-performing projects, and velocity trends.
-
-### 6. Risk Monitor & AI Prediction (`risk-monitor.html`)
-- High-priority alert banner for projects requiring immediate triage.
-- Risk level filtering: *All*, *High Risk*, *Medium Risk*, *Low Risk*.
-- Detailed risk cards featuring composite risk scores (0–100), categories, and root cause factors.
-- **AI-Style Predictive Engine**: Delay probability gauge, model prediction confidence (92%), and portfolio resiliency index.
-- One-click **Executive Mitigation Playbooks** (Reassign Resources, Review Budget, Update Delivery Timeline).
-- **"Run Smart Analysis"** interactive modal providing diagnostic action items.
-
-### 7. Team & Capacity Management (`team.html`)
-- Team KPIs: Total Team Members, Available, Overloaded, and Average Task Completion.
-- Instant search and role filter (*Project Manager*, *Frontend Developer*, *Backend Developer*, *UI/UX Designer*, *Data Analyst*).
-- **"Add Team Member"** modal with automatic initials avatar generator and `localStorage` persistence.
-- Visual workload capacity bars and one-click workload audit breakdown.
+**Tooling**
+- Vite, TypeScript, Tailwind CSS and PostCSS (configured for the optional React/TypeScript build)
+- Other installed libraries: React 18, React Router, Recharts, Leaflet, jsPDF
 
 ---
 
-## 💻 Technology Stack
-- **HTML5**: Semantic document structuring with accessible forms and modals.
-- **CSS3**: Custom design system using variables, CSS Grid, Flexbox, smooth transitions, and responsive media queries.
-- **Vanilla ES6 JavaScript**: Zero-dependency logic for modals, filtering, search, and dynamic DOM rendering.
-- **Chart.js (CDN)**: Interactive HTML5 Canvas data visualizations.
-- **Google Fonts (Inter)**: Clean, modern enterprise typography.
-- **Node.js & Express**: High-performance RESTful API microservice with CORS support.
-- **SQLite Database (`node:sqlite`)**: Server-grade embedded relational database with WAL (Write-Ahead-Logging) mode and zero configuration.
-- **HTML5 & CSS3**: Custom design system using CSS variables, Flexbox, Grid, and smooth transitions.
-- **Vanilla ES6 JavaScript & Client API**: Zero-dependency logic with seamless fallback between SQLite and localStorage.
-- **Chart.js (CDN)**: Interactive HTML5 Canvas data visualizations.
-- **Google Fonts (Inter)**: Modern enterprise typography.
-
----
-
-## 📂 Complete Folder Structure
+## 📂 Project Structure
 
 ```text
-d:\Antigravity project/
+.
 ├── backend/
-│   ├── database.js         # SQLite connection, table schemas, and automated seeding
-│   ├── server.js           # Express REST API server & static file host (Port 5050)
-│   └── projectpulse.db     # Persistent SQLite database file
-├── api.js                  # Frontend connector: calls SQLite backend or falls back to localStorage
-├── login.html              # Split-screen login page with demo authentication
-├── index.html              # Main executive telemetry dashboard with KPIs and Chart.js
-├── projects.html           # Project portfolio management, search, filter, and creation modal
-├── project-details.html    # Deep project drill-down with circular progress, timeline, and task tracker
-├── reports.html            # Portfolio analytics, monthly trends, and doughnut chart distribution
-├── risk-monitor.html       # AI-style risk prediction, delay probability, and mitigation playbooks
-├── team.html               # Team member roster, role filtering, and capacity workload tracking
-├── package.json            # Node.js project manifest and execution scripts
-└── README.md               # Complete project documentation and run guide
+│   ├── server.js            # Express REST API + static file host (port 5050)
+│   ├── database.js          # SQLite connection, schema and seed data
+│   └── projectpulse.db      # SQLite database file (generated on first run)
+├── api.js                   # Frontend API client with localStorage fallback
+├── landing.html             # Marketing / landing page
+├── login.html               # Login
+├── register.html            # Registration
+├── index.html               # Executive dashboard
+├── projects.html            # Project portfolio
+├── project-details.html     # Single-project drill-down
+├── reports.html             # Reports & analytics
+├── risk-monitor.html        # Risk monitor & delay prediction
+├── team.html                # Team & workload
+├── copilot.html             # PulseAI Copilot Studio
+├── package.json
+├── vite.config.ts
+├── tailwind.config.js
+├── postcss.config.js
+├── tsconfig.json
+└── README.md
 ```
 
 ---
 
-## 🚀 How to Run the Backend & Database
+## ⚙️ Getting Started
 
-### Step 1: Start the Backend Server
-In your terminal or PowerShell at `D:\Antigravity project`, run:
-```powershell
-node backend/server.js
-```
-*(or using npm: `npm run server`)*
+### Prerequisites
 
-You will see:
-```text
-====================================================
-⚡ ProjectPulse Backend Server running on port 5050
-🌐 Full Application URL: http://localhost:5050
-📊 REST API Root:        http://localhost:5050/api/projects
-💾 Database:             SQLite (projectpulse.db)
-====================================================
+- [Node.js](https://nodejs.org/) **18 or newer** (22+ recommended)
+- npm
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/<your-username>/<your-repo-name>.git
+cd <your-repo-name>
 ```
 
-### Step 2: Open the Application
-Open your browser and navigate to:
-```text
-http://localhost:5050
+### 2. Install dependencies
+
+```bash
+npm install
 ```
-This loads both the frontend and connects directly to the **SQLite database**!
+
+### 3. (Optional) Configure environment variables
+
+Create a `.env` file in the project root:
+
+```env
+PORT=5050
+JWT_SECRET=change_this_to_a_long_random_string
+```
+
+> `.env` is already listed in `.gitignore`, so your secrets will not be committed.
+
+### 4. Start the server
+
+```bash
+npm run server
+```
+
+You should see the server start on port **5050**.
+
+### 5. Open the app
+
+Go to **http://localhost:5050** in your browser.
+
+> 💡 You can also open the HTML files directly. If the backend is not running, the app switches to `localStorage` mode automatically.
 
 ---
 
-## 🌐 REST API Endpoints
+## 🔑 Demo Accounts
+
+| Role | Email | Password |
+|---|---|---|
+| Administrator | `admin@projectpulse.com` | `admin123` |
+| Project Manager | `pm@projectpulse.com` | `pm123` |
+| Team Member (Dev) | `dev@projectpulse.com` | `dev123` |
+| Team Member (Analyst) | `analyst@projectpulse.com` | `analyst123` |
+| Team Member (Designer) | `designer@projectpulse.com` | `designer123` |
+
+The login page also has quick-fill buttons for each profile. You can create your own account from the **Register** page.
+
+> ⚠️ These credentials are for demo purposes only. Remove them before any real deployment.
+
+---
+
+## 🌐 REST API
+
+Base URL: `http://localhost:5050/api`
 
 | Method | Endpoint | Description |
 |---|---|---|
-| `POST` | `/api/auth/login` | Authenticate user & issue session |
-| `GET` | `/api/projects` | List all projects (supports `?status=` and `?search=`) |
-| `GET` | `/api/projects/:id` | Get project detail & progress audit history |
-| `POST` | `/api/projects` | Create a new project in SQLite |
-| `PUT` | `/api/projects/:id/progress` | Update project progress % and record audit log |
-| `GET` | `/api/team` | List all team members (supports `?role=`) |
-| `POST` | `/api/team` | Add new team member to SQLite |
-| `GET` | `/api/reports/kpis` | Real-time aggregate KPIs (progress, budget, tasks) |
-| `GET` | `/api/health` | Backend and database health status |
+| `GET` | `/health` | Backend and database health check |
+| `POST` | `/auth/login` | Log in and receive a JWT |
+| `POST` | `/auth/register` | Create a new account |
+| `GET` | `/projects` | List projects (`?status=` and `?search=` filters) |
+| `GET` | `/projects/:id` | Project details and progress history |
+| `POST` | `/projects` | Create a project |
+| `PUT` | `/projects/:id/progress` | Update progress and log a note |
+| `GET` | `/team` | List team members (`?role=` and `?search=` filters) |
+| `POST` | `/team` | Add a team member |
+| `GET` | `/reports/kpis` | Aggregate portfolio KPIs |
+| `POST` | `/chat` | Ask the PulseAI Copilot about a project |
+
+Protected endpoints expect an `Authorization: Bearer <token>` header.
 
 ---
 
-## 🔑 Demo Login Credentials
+## 📜 Available Scripts
 
-For testing and hackathon evaluation, click the **"Auto Fill"** button on the login screen or enter:
-
-| Parameter | Value |
+| Command | Description |
 |---|---|
-| **Email** | `admin@projectpulse.com` |
-| **Password** | `admin123` |
-| **Supported Roles** | Administrator, Project Manager, Team Member |
-
-*Note: You can switch roles from the dropdown to experience different operational contexts.*
-
----
-
-## 🔮 Future Enhancements
-- **Cloud Database Integration**: Migration to Firebase Firestore or PostgreSQL for multi-tenant enterprise data.
-- **Real-Time Authentication**: Firebase Authentication with OAuth (Google, GitHub, SAML SSO).
-- **Automated Email & Slack Webhooks**: Immediate dispatch of delay and budget escalation alerts.
-- **Production ML Risk Engine**: Python-based scikit-learn / TensorFlow pipeline trained on historical Jira/Git telemetry to predict sprint slip probabilities.
-- **Client-Side Document Export**: Native client-side PDF (`jspdf`) and Excel (`xlsx`) automated executive exports.
-- **Granular RBAC**: Role-based access control rules constraining write operations to authorized administrators.
+| `npm run server` | Start the Express + SQLite backend |
+| `npm start` | Same as `npm run server` |
+| `npm run dev` | Start the Vite dev server (port 3000) |
+| `npm run build` | Type-check and build with Vite |
+| `npm run preview` | Preview the Vite production build |
 
 ---
 
-## 👥 Hackathon Team Placeholder
-- **Lead Full-Stack Developer**: Team Member 1
-- **UI/UX Designer & Product Lead**: Team Member 2
-- **Data & AI Systems Specialist**: Team Member 3
+## 🔮 Roadmap
+
+- [ ] Real LLM integration for PulseAI Copilot (OpenAI / Gemini / Claude API)
+- [ ] ML-based delay prediction trained on historical project data
+- [ ] OAuth sign-in (Google, GitHub)
+- [ ] Email and Slack alerts for delays and budget overruns
+- [ ] PDF and Excel export of reports
+- [ ] Granular role-based access control
+- [ ] Cloud database (PostgreSQL / Firebase) and deployment
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome!
+
+1. Fork the repository
+2. Create a branch: `git checkout -b feature/your-feature`
+3. Commit your changes: `git commit -m "Add your feature"`
+4. Push the branch: `git push origin feature/your-feature`
+5. Open a Pull Request
+
+---
+
+## 👥 Team
+
+| Role | Name |
+|---|---|
+| Lead Full-Stack Developer | _Your Name_ |
+| UI/UX Designer & Product Lead | _Your Name_ |
+| Data & AI Specialist | _Your Name_ |
 
 ---
 
 ## 📄 License
-This project is open-source and released under the **MIT License**.
+
+Released under the **MIT License**. See [`LICENSE`](LICENSE) for details.
