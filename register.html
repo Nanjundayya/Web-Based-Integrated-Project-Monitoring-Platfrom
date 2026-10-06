@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ProjectPulse | Create Your Account</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #4f46e5;
+      --primary-gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #d946ef 100%);
+      --dark-navy: #090d16;
+      --surface-glass: rgba(255, 255, 255, 0.88);
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --border-subtle: rgba(226, 232, 240, 0.8);
+      --glow-indigo: 0 0 35px rgba(99, 102, 241, 0.3);
+      --ease-spring: cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', sans-serif;
+    }
+
+    body {
+      background: #090d16;
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Ambient animated lighting background */
+    .ambient-bg {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .ambient-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(120px);
+      opacity: 0.55;
+      animation: floatOrb 18s ease-in-out infinite alternate;
+    }
+
+    .orb-1 {
+      top: -15%;
+      left: -10%;
+      width: 700px;
+      height: 700px;
+      background: radial-gradient(circle, #4f46e5 0%, rgba(79, 70, 229, 0) 70%);
+      animation-duration: 16s;
+    }
+
+    .orb-2 {
+      bottom: -20%;
+      right: -10%;
+      width: 800px;
+      height: 800px;
+      background: radial-gradient(circle, #9333ea 0%, rgba(147, 51, 234, 0) 70%);
+      animation-duration: 22s;
+    }
+
+    .orb-3 {
+      top: 40%;
+      left: 30%;
+      width: 450px;
+      height: 450px;
+      background: radial-gradient(circle, #06b6d4 0%, rgba(6, 182, 212, 0) 70%);
+      animation-duration: 14s;
+    }
+
+    @keyframes floatOrb {
+      0% { transform: translate(0, 0) scale(1); }
+      50% { transform: translate(60px, -40px) scale(1.1); }
+      100% { transform: translate(-40px, 50px) scale(0.95); }
+    }
+
+    .register-container {
+      display: flex;
+      width: 100vw;
+      min-height: 100vh;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Left Promo Showcase */
+    .promo-side {
+      flex: 1.1;
+      padding: 60px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      color: #ffffff;
+      position: relative;
+      backdrop-filter: blur(10px);
+      background: rgba(10, 15, 29, 0.45);
+      border-right: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .brand-block {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      animation: fadeInDown 0.8s var(--ease-spring);
+    }
+
+    .brand-logo-icon {
+      width: 52px;
+      height: 52px;
+      background: var(--primary-gradient);
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 26px;
+      box-shadow: 0 0 35px rgba(99, 102, 241, 0.6);
+    }
+
+    .brand-name {
+      font-size: 26px;
+      font-weight: 900;
+      letter-spacing: -0.8px;
+    }
+
+    .brand-tagline {
+      font-size: 13px;
+      color: #94a3b8;
+      font-weight: 500;
+    }
+
+    .promo-center {
+      margin: 40px 0;
+      animation: fadeInUp 0.9s var(--ease-spring);
+    }
+
+    .badge-pill-live {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      background: rgba(99, 102, 241, 0.15);
+      border: 1px solid rgba(99, 102, 241, 0.4);
+      border-radius: 30px;
+      font-size: 12px;
+      font-weight: 700;
+      color: #a5b4fc;
+      margin-bottom: 20px;
+      letter-spacing: 0.3px;
+    }
+
+    .radar-dot {
+      width: 8px;
+      height: 8px;
+      background: #34d399;
+      border-radius: 50%;
+      box-shadow: 0 0 10px #34d399;
+      animation: pulseRadar 2s infinite;
+    }
+
+    @keyframes pulseRadar {
+      0% { transform: scale(0.9); opacity: 0.8; }
+      50% { transform: scale(1.4); opacity: 1; }
+      100% { transform: scale(0.9); opacity: 0.8; }
+    }
+
+    .promo-headline {
+      font-size: 44px;
+      font-weight: 900;
+      line-height: 1.15;
+      letter-spacing: -1.2px;
+      margin-bottom: 18px;
+    }
+
+    .promo-headline span {
+      background: var(--primary-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .promo-description {
+      font-size: 15px;
+      line-height: 1.6;
+      color: #cbd5e1;
+      max-width: 520px;
+      margin-bottom: 35px;
+    }
+
+    .feature-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .feature-chip {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 14px;
+      padding: 16px;
+      transition: all 0.3s;
+    }
+
+    .feature-chip:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(99, 102, 241, 0.4);
+      transform: translateY(-2px);
+    }
+
+    .chip-icon {
+      font-size: 22px;
+      margin-bottom: 8px;
+    }
+
+    .chip-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 4px;
+    }
+
+    .chip-desc {
+      font-size: 12px;
+      color: #94a3b8;
+      line-height: 1.4;
+    }
+
+    .promo-foot {
+      font-size: 12px;
+      color: #64748b;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* Right Form Side */
+    .form-side {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+      position: relative;
+    }
+
+    .auth-card {
+      width: 100%;
+      max-width: 480px;
+      background: var(--surface-glass);
+      backdrop-filter: blur(25px);
+      -webkit-backdrop-filter: blur(25px);
+      border: 1px solid rgba(255, 255, 255, 0.8);
+      border-radius: 28px;
+      padding: 40px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35), 0 0 35px rgba(99, 102, 241, 0.2);
+      animation: scaleIn 0.8s var(--ease-spring);
+    }
+
+    .auth-header {
+      margin-bottom: 24px;
+    }
+
+    .auth-header h2 {
+      font-size: 26px;
+      font-weight: 900;
+      color: var(--text-main);
+      letter-spacing: -0.6px;
+      margin-bottom: 6px;
+    }
+
+    .auth-header p {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-row-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 12px;
+      font-weight: 700;
+      color: #334155;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .input-box {
+      position: relative;
+    }
+
+    .form-input, .form-select {
+      width: 100%;
+      padding: 12px 14px;
+      background: #ffffff;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 12px;
+      font-size: 14px;
+      color: #0f172a;
+      outline: none;
+      transition: all 0.2s;
+    }
+
+    .form-input:focus, .form-select:focus {
+      border-color: #6366f1;
+      box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15);
+    }
+
+    .pw-toggle {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: #64748b;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      padding: 4px;
+    }
+
+    .pw-toggle:hover {
+      color: var(--primary);
+    }
+
+    .role-badge-info {
+      font-size: 11px;
+      color: #4f46e5;
+      background: #eef2ff;
+      padding: 6px 10px;
+      border-radius: 8px;
+      margin-top: 6px;
+      line-height: 1.4;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-submit {
+      width: 100%;
+      padding: 14px;
+      background: var(--primary-gradient);
+      color: #ffffff;
+      border: none;
+      border-radius: 14px;
+      font-size: 15px;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      box-shadow: 0 10px 25px rgba(99, 102, 241, 0.35);
+      transition: all 0.3s;
+      margin-top: 10px;
+      margin-bottom: 18px;
+    }
+
+    .btn-submit:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 15px 30px rgba(99, 102, 241, 0.5);
+    }
+
+    .auth-footer {
+      text-align: center;
+      font-size: 13px;
+      color: var(--text-muted);
+      border-top: 1px solid #f1f5f9;
+      padding-top: 18px;
+    }
+
+    .auth-footer a {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 700;
+      margin-left: 4px;
+    }
+
+    .auth-footer a:hover {
+      text-decoration: underline;
+    }
+
+    .alert-banner {
+      padding: 12px 16px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 18px;
+      display: none;
+      animation: fadeIn 0.3s;
+    }
+
+    .alert-err {
+      background: #fef2f2;
+      color: #b91c1c;
+      border: 1px solid #fecaca;
+    }
+
+    .alert-ok {
+      background: #f0fdf4;
+      color: #15803d;
+      border: 1px solid #bbf7d0;
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes scaleIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    @media (max-width: 1024px) {
+      .register-container { flex-direction: column; }
+      .promo-side { padding: 40px 24px; }
+      .promo-headline { font-size: 34px; }
+      .form-side { padding: 30px 16px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Ambient Animated Lighting -->
+  <div class="ambient-bg">
+    <div class="ambient-orb orb-1"></div>
+    <div class="ambient-orb orb-2"></div>
+    <div class="ambient-orb orb-3"></div>
+  </div>
+
+  <div class="register-container">
+    <!-- Left Hero Section -->
+    <div class="promo-side">
+      <div class="brand-block">
+        <div class="brand-logo-icon">⚡</div>
+        <div>
+          <div class="brand-name">ProjectPulse</div>
+          <div class="brand-tagline">Monitor. Manage. Deliver.</div>
+        </div>
+      </div>
+
+      <div class="promo-center">
+        <div class="badge-pill-live">
+          <span class="radar-dot"></span>
+          <span>Instant Developer & Squad Onboarding</span>
+        </div>
+
+        <h1 class="promo-headline">
+          Build & monitor<br>
+          <span>your next breakthrough.</span>
+        </h1>
+
+        <p class="promo-description">
+          Register your account to initialize your dedicated ProjectPulse workspace. Add new projects, configure delivery milestones, and interact with the PulseAI Copilot for continuous intelligence.
+        </p>
+
+        <div class="feature-grid">
+          <div class="feature-chip">
+            <div class="chip-icon">🚀</div>
+            <div class="chip-title">Add New Projects</div>
+            <div class="chip-desc">Define sprints, deadlines, team capacity, and targets</div>
+          </div>
+          <div class="feature-chip">
+            <div class="chip-icon">🤖</div>
+            <div class="chip-title">PulseAI Copilot</div>
+            <div class="chip-desc">In-depth AI analysis of risks, budgets, and milestones</div>
+          </div>
+          <div class="feature-chip">
+            <div class="chip-icon">📊</div>
+            <div class="chip-title">Telemetry Analytics</div>
+            <div class="chip-desc">Real-time health gauges and performance velocity</div>
+          </div>
+          <div class="feature-chip">
+            <div class="chip-icon">🔒</div>
+            <div class="chip-title">Scoped Workspace</div>
+            <div class="chip-desc">Personalized views for your created initiatives</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="promo-foot">
+        <span>🛡️</span>
+        <span>Secured with SQLite Relational Persistence & Enterprise RBAC.</span>
+      </div>
+    </div>
+
+    <!-- Right Registration Box -->
+    <div class="form-side">
+      <div class="auth-card">
+        <div class="auth-header">
+          <h2>Create Account</h2>
+          <p>Register to add new projects and analyze real-time telemetry.</p>
+        </div>
+
+        <div id="alertNotice" class="alert-banner"></div>
+
+        <form id="registerForm">
+          <div class="form-group">
+            <label class="form-label" for="userName">Full Name</label>
+            <div class="input-box">
+              <input type="text" id="userName" class="form-input" placeholder="e.g. Jordan Hayes" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="userEmail">Corporate / Personal Email</label>
+            <div class="input-box">
+              <input type="email" id="userEmail" class="form-input" placeholder="jordan@company.com" required>
+            </div>
+          </div>
+
+          <div class="form-row-2">
+            <div class="form-group">
+              <label class="form-label" for="userPassword">Password</label>
+              <div class="input-box">
+                <input type="password" id="userPassword" class="form-input" placeholder="Min. 6 chars" required minlength="6">
+                <button type="button" id="pwToggleBtn" class="pw-toggle">Show</button>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="userConfirmPassword">Confirm</label>
+              <div class="input-box">
+                <input type="password" id="userConfirmPassword" class="form-input" placeholder="Repeat password" required minlength="6">
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="userRole">Account Mode</label>
+            <select id="userRole" class="form-select">
+              <option value="Project Creator">Project Creator (Add & Analyze My Projects)</option>
+              <option value="Project Manager">Project Manager (Operations Lead)</option>
+              <option value="Team Member">Team Member (Engineering Specialist)</option>
+            </select>
+            <div class="role-badge-info">
+              <span>✨</span>
+              <span>Enables creating new projects and conducting AI Copilot risk & telemetry analysis.</span>
+            </div>
+          </div>
+
+          <button type="submit" class="btn-submit" id="submitBtn">
+            <span>Register & Launch Workspace</span>
+            <span style="font-size: 18px;">→</span>
+          </button>
+        </form>
+
+        <div class="auth-footer">
+          Already have an account? <a href="login.html">Sign In here</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="api.js"></script>
+  <script>
+    // Password visibility toggle
+    const pwInput = document.getElementById('userPassword');
+    const pwToggle = document.getElementById('pwToggleBtn');
+
+    pwToggle.addEventListener('click', () => {
+      if (pwInput.type === 'password') {
+        pwInput.type = 'text';
+        pwToggle.textContent = 'Hide';
+      } else {
+        pwInput.type = 'password';
+        pwToggle.textContent = 'Show';
+      }
+    });
+
+    document.getElementById('registerForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+
+      const name = document.getElementById('userName').value.trim();
+      const email = document.getElementById('userEmail').value.trim().toLowerCase();
+      const password = document.getElementById('userPassword').value.trim();
+      const confirmPw = document.getElementById('userConfirmPassword').value.trim();
+      const role = document.getElementById('userRole').value;
+      const notice = document.getElementById('alertNotice');
+      const submitBtn = document.getElementById('submitBtn');
+
+      if (password !== confirmPw) {
+        notice.className = 'alert-banner alert-err';
+        notice.style.display = 'block';
+        notice.innerHTML = '⚠️ Passwords do not match. Please verify both fields.';
+        return;
+      }
+
+      submitBtn.innerHTML = '<span>Creating account...</span>';
+      submitBtn.style.opacity = '0.7';
+
+      try {
+        let result;
+        if (window.ProjectPulseAPI) {
+          result = await window.ProjectPulseAPI.register(name, email, password, role);
+        } else {
+          // Local fallback
+          const user = {
+            name,
+            email,
+            role,
+            isScopedUser: true,
+            loggedIn: true
+          };
+          localStorage.setItem('projectPulseUser', JSON.stringify(user));
+          result = { success: true, user };
+        }
+
+        notice.className = 'alert-banner alert-ok';
+        notice.style.display = 'block';
+        notice.innerHTML = `✓ Account created successfully! Welcome, ${name}. Redirecting to your projects...`;
+
+        setTimeout(() => {
+          window.location.href = 'projects.html';
+        }, 800);
+      } catch (err) {
+        notice.className = 'alert-banner alert-err';
+        notice.style.display = 'block';
+        notice.innerHTML = `⚠️ ${err.message || 'Registration failed. Please check information.'}`;
+        submitBtn.innerHTML = '<span>Register & Launch Workspace</span><span style="font-size: 18px;">→</span>';
+        submitBtn.style.opacity = '1';
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,1121 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ProjectPulse | Autonomous Project Governance & AI Telemetry</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --primary: #4f46e5;
+      --primary-gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #d946ef 100%);
+      --bg-dark: #070a13;
+      --card-glass: rgba(15, 23, 42, 0.65);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent-glow: rgba(99, 102, 241, 0.35);
+      --ease-spring: cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', sans-serif;
+    }
+
+    body {
+      background: var(--bg-dark);
+      color: var(--text-main);
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+
+    /* Ambient animated lighting */
+    .ambient-bg {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .ambient-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(140px);
+      opacity: 0.5;
+      animation: floatOrb 20s ease-in-out infinite alternate;
+    }
+
+    .orb-1 {
+      top: -10%;
+      left: 10%;
+      width: 700px;
+      height: 700px;
+      background: radial-gradient(circle, #4f46e5 0%, rgba(79, 70, 229, 0) 70%);
+    }
+
+    .orb-2 {
+      top: 40%;
+      right: -10%;
+      width: 750px;
+      height: 750px;
+      background: radial-gradient(circle, #9333ea 0%, rgba(147, 51, 234, 0) 70%);
+      animation-duration: 24s;
+    }
+
+    .orb-3 {
+      bottom: -15%;
+      left: 20%;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, #06b6d4 0%, rgba(6, 182, 212, 0) 70%);
+      animation-duration: 18s;
+    }
+
+    @keyframes floatOrb {
+      0% {
+        transform: translate(0, 0) scale(1);
+      }
+
+      50% {
+        transform: translate(50px, -40px) scale(1.08);
+      }
+
+      100% {
+        transform: translate(-40px, 40px) scale(0.95);
+      }
+    }
+
+    .site-container {
+      position: relative;
+      z-index: 1;
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* Navigation */
+    .navbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 24px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      position: sticky;
+      top: 0;
+      background: rgba(7, 10, 19, 0.8);
+      backdrop-filter: blur(16px);
+      z-index: 100;
+    }
+
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: #ffffff;
+    }
+
+    .brand-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      background: var(--primary-gradient);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      box-shadow: 0 0 25px rgba(99, 102, 241, 0.6);
+    }
+
+    .brand-text h1 {
+      font-size: 20px;
+      font-weight: 900;
+      letter-spacing: -0.6px;
+    }
+
+    .brand-text p {
+      font-size: 11px;
+      color: var(--text-muted);
+      letter-spacing: 0.6px;
+      text-transform: uppercase;
+    }
+
+    .nav-menu {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+    }
+
+    .nav-item {
+      color: #cbd5e1;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 600;
+      transition: color 0.2s;
+    }
+
+    .nav-item:hover {
+      color: #ffffff;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .btn-secondary {
+      padding: 9px 18px;
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      background: rgba(255, 255, 255, 0.04);
+      color: #ffffff;
+      font-size: 13px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.3);
+    }
+
+    .btn-primary {
+      padding: 9px 20px;
+      border-radius: 10px;
+      background: var(--primary-gradient);
+      color: #ffffff;
+      font-size: 13px;
+      font-weight: 800;
+      text-decoration: none;
+      box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(99, 102, 241, 0.6);
+    }
+
+    /* Hero Section */
+    .hero-section {
+      padding: 90px 0 60px 0;
+      text-align: center;
+      position: relative;
+    }
+
+    .badge-pill-hero {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 7px 18px;
+      background: rgba(99, 102, 241, 0.12);
+      border: 1px solid rgba(99, 102, 241, 0.35);
+      border-radius: 30px;
+      font-size: 13px;
+      font-weight: 700;
+      color: #c7d2fe;
+      margin-bottom: 24px;
+    }
+
+    .radar-dot {
+      width: 8px;
+      height: 8px;
+      background: #10b981;
+      border-radius: 50%;
+      box-shadow: 0 0 10px #10b981;
+      animation: pulseRadar 2s infinite;
+    }
+
+    @keyframes pulseRadar {
+      0% {
+        transform: scale(0.9);
+        opacity: 0.8;
+      }
+
+      50% {
+        transform: scale(1.4);
+        opacity: 1;
+      }
+
+      100% {
+        transform: scale(0.9);
+        opacity: 0.8;
+      }
+    }
+
+    .hero-title {
+      font-size: 60px;
+      font-weight: 900;
+      line-height: 1.1;
+      letter-spacing: -1.8px;
+      max-width: 980px;
+      margin: 0 auto 24px auto;
+    }
+
+    .hero-title span {
+      background: var(--primary-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-subtitle {
+      font-size: 18px;
+      color: var(--text-muted);
+      max-width: 720px;
+      margin: 0 auto 38px auto;
+      line-height: 1.6;
+    }
+
+    .hero-cta-group {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 50px;
+    }
+
+    .btn-hero-main {
+      padding: 15px 32px;
+      border-radius: 14px;
+      background: var(--primary-gradient);
+      color: #ffffff;
+      font-size: 16px;
+      font-weight: 800;
+      text-decoration: none;
+      box-shadow: 0 10px 30px rgba(99, 102, 241, 0.45);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: all 0.25s var(--ease-spring);
+    }
+
+    .btn-hero-main:hover {
+      transform: translateY(-3px) scale(1.02);
+      box-shadow: 0 18px 40px rgba(99, 102, 241, 0.6);
+    }
+
+    .btn-hero-outline {
+      padding: 15px 30px;
+      border-radius: 14px;
+      border: 1.5px solid rgba(255, 255, 255, 0.2);
+      background: rgba(255, 255, 255, 0.05);
+      color: #ffffff;
+      font-size: 16px;
+      font-weight: 700;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: all 0.25s;
+    }
+
+    .btn-hero-outline:hover {
+      background: rgba(255, 255, 255, 0.12);
+      border-color: rgba(255, 255, 255, 0.4);
+      transform: translateY(-2px);
+    }
+
+    /* Stats Strip */
+    .stats-ribbon {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      padding: 30px 40px;
+      background: var(--card-glass);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      margin-bottom: 70px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    }
+
+    .stat-item {
+      text-align: center;
+    }
+
+    .stat-num {
+      font-size: 32px;
+      font-weight: 900;
+      background: var(--primary-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: -0.5px;
+    }
+
+    .stat-lbl {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-top: 4px;
+      font-weight: 600;
+    }
+
+    /* Interactive Live AI Copilot Playground */
+    .playground-section {
+      padding: 60px 0;
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 45px;
+    }
+
+    .section-tag {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 1.4px;
+      color: #818cf8;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+
+    .section-title {
+      font-size: 36px;
+      font-weight: 900;
+      letter-spacing: -1px;
+      margin-bottom: 12px;
+    }
+
+    .section-subtitle {
+      font-size: 15px;
+      color: var(--text-muted);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .copilot-demo-card {
+      background: linear-gradient(145deg, rgba(15, 23, 42, 0.85) 0%, rgba(30, 27, 75, 0.7) 100%);
+      border: 1.5px solid rgba(99, 102, 241, 0.3);
+      border-radius: 28px;
+      overflow: hidden;
+      box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.5), 0 0 40px rgba(99, 102, 241, 0.2);
+    }
+
+    .demo-card-top {
+      padding: 20px 30px;
+      background: rgba(9, 13, 22, 0.7);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .demo-top-info {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .demo-avatar {
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      background: var(--primary-gradient);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      box-shadow: 0 0 20px rgba(99, 102, 241, 0.6);
+    }
+
+    .demo-chat-body {
+      padding: 30px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      min-height: 380px;
+      max-height: 460px;
+      overflow-y: auto;
+      background: rgba(5, 8, 17, 0.6);
+    }
+
+    .demo-bubble {
+      display: flex;
+      gap: 12px;
+      max-width: 80%;
+      animation: fadeIn 0.3s;
+    }
+
+    .demo-bubble.bot {
+      align-self: flex-start;
+    }
+
+    .demo-bubble.user {
+      align-self: flex-end;
+      flex-direction: row-reverse;
+    }
+
+    .demo-msg-text {
+      padding: 14px 18px;
+      border-radius: 18px;
+      font-size: 13.5px;
+      line-height: 1.55;
+    }
+
+    .demo-bubble.bot .demo-msg-text {
+      background: rgba(30, 41, 59, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: #e2e8f0;
+      border-top-left-radius: 4px;
+    }
+
+    .demo-bubble.user .demo-msg-text {
+      background: var(--primary-gradient);
+      color: #ffffff;
+      border-top-right-radius: 4px;
+      box-shadow: 0 4px 15px rgba(99, 102, 241, 0.35);
+    }
+
+    .demo-chips-row {
+      padding: 14px 30px;
+      background: rgba(10, 15, 29, 0.85);
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+
+    .demo-chips-row::-webkit-scrollbar {
+      display: none;
+    }
+
+    .demo-chip-btn {
+      white-space: nowrap;
+      padding: 7px 15px;
+      border-radius: 20px;
+      background: rgba(99, 102, 241, 0.15);
+      border: 1px solid rgba(99, 102, 241, 0.4);
+      color: #c7d2fe;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .demo-chip-btn:hover {
+      background: #4f46e5;
+      color: #ffffff;
+      transform: translateY(-2px);
+    }
+
+    .demo-input-bar {
+      padding: 18px 30px;
+      background: rgba(9, 13, 22, 0.95);
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      display: flex;
+      gap: 12px;
+    }
+
+    .demo-input {
+      flex: 1;
+      padding: 13px 20px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1.5px solid rgba(255, 255, 255, 0.12);
+      border-radius: 14px;
+      color: #ffffff;
+      font-size: 14px;
+      outline: none;
+      transition: all 0.2s;
+    }
+
+    .demo-input:focus {
+      border-color: #6366f1;
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .demo-send-btn {
+      padding: 13px 24px;
+      border-radius: 14px;
+      background: var(--primary-gradient);
+      color: #ffffff;
+      border: none;
+      font-weight: 800;
+      font-size: 14px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+      transition: all 0.2s;
+    }
+
+    .demo-send-btn:hover {
+      transform: scale(1.03);
+    }
+
+    /* Features Bento Grid */
+    .bento-section {
+      padding: 60px 0;
+    }
+
+    .bento-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .bento-card {
+      background: var(--card-glass);
+      border: 1px solid var(--card-border);
+      border-radius: 24px;
+      padding: 32px;
+      transition: all 0.3s var(--ease-spring);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .bento-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(99, 102, 241, 0.4);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    }
+
+    .bento-card.col-2 {
+      grid-column: span 2;
+    }
+
+    .bento-card-icon {
+      width: 50px;
+      height: 50px;
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+
+    .bento-card h3 {
+      font-size: 20px;
+      font-weight: 800;
+      margin-bottom: 8px;
+      letter-spacing: -0.4px;
+    }
+
+    .bento-card p {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.55;
+    }
+
+    /* CTA Bottom Banner */
+    .bottom-cta-banner {
+      margin: 80px 0;
+      padding: 60px 40px;
+      border-radius: 30px;
+      background: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #4c1d95 100%);
+      border: 1.5px solid rgba(139, 92, 246, 0.4);
+      text-align: center;
+      box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.6);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .bottom-cta-banner h2 {
+      font-size: 40px;
+      font-weight: 900;
+      margin-bottom: 14px;
+      letter-spacing: -1px;
+    }
+
+    .bottom-cta-banner p {
+      font-size: 16px;
+      color: #cbd5e1;
+      max-width: 600px;
+      margin: 0 auto 30px auto;
+    }
+
+    /* Footer */
+    .site-footer {
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 36px 0 22px;
+      display: grid;
+      grid-template-columns: minmax(240px, 1.5fr) repeat(2, minmax(130px, 0.7fr));
+      align-items: start;
+      gap: 32px;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .footer-brand-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      color: #ffffff;
+      text-decoration: none;
+      font-size: 16px;
+      font-weight: 800;
+    }
+
+    .footer-brand-link span {
+      font-size: 19px;
+    }
+
+    .footer-brand p {
+      max-width: 340px;
+      margin-top: 10px;
+      line-height: 1.7;
+    }
+
+    .footer-heading {
+      margin-bottom: 12px;
+      color: #ffffff;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .footer-links {
+      display: grid;
+      gap: 9px;
+      list-style: none;
+    }
+
+    .footer-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover {
+      color: #ffffff;
+    }
+
+    .footer-bottom {
+      grid-column: 1 / -1;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px 20px;
+      padding-top: 18px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      font-size: 12px;
+    }
+
+    @media (max-width: 900px) {
+      .hero-title {
+        font-size: 42px;
+      }
+
+      .bento-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .bento-card.col-2 {
+        grid-column: span 1;
+      }
+
+      .stats-ribbon {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .nav-menu {
+        display: none;
+      }
+
+      .site-footer {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 26px 20px;
+      }
+
+      .footer-brand {
+        grid-column: 1 / -1;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .site-footer {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .footer-bottom {
+        display: grid;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Ambient Light Orbs -->
+  <div class="ambient-bg">
+    <div class="ambient-orb orb-1"></div>
+    <div class="ambient-orb orb-2"></div>
+    <div class="ambient-orb orb-3"></div>
+  </div>
+
+  <div class="site-container">
+    <!-- Navigation Bar -->
+    <header class="navbar">
+      <a href="landing.html" class="brand-group">
+        <div class="brand-icon">⚡</div>
+        <div class="brand-text">
+          <h1>ProjectPulse</h1>
+          <p>Monitor. Manage. Deliver.</p>
+        </div>
+      </a>
+
+      <nav class="nav-menu">
+        <a href="#features" class="nav-item">Features</a>
+        <a href="#playground" class="nav-item">AI Copilot Demo</a>
+        <a href="projects.html" class="nav-item">Projects</a>
+        <a href="copilot.html" class="nav-item">Copilot Studio</a>
+        <a href="login.html" class="nav-item">Demo Profiles</a>
+      </nav>
+
+      <div class="nav-actions">
+        <a href="login.html" class="btn-secondary">Sign In</a>
+        <a href="register.html" class="btn-primary">
+          <span>Get Started</span>
+          <span>→</span>
+        </a>
+      </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+      <div class="badge-pill-hero">
+        <span class="radar-dot"></span>
+        <span>Enterprise Telemetry Engine v3.0 • Live with SQLite</span>
+      </div>
+
+      <h1 class="hero-title">
+        Monitor. Manage. Deliver.<br>
+        <span>With Autonomous AI Project Telemetry.</span>
+      </h1>
+
+      <p class="hero-subtitle">
+        The full-stack project monitoring platform engineered for agile engineering squads. Track real-time progress,
+        predict operational milestone bottlenecks, and interact with the PulseAI Copilot grounded in relational data.
+      </p>
+
+      <div class="hero-cta-group">
+        <a href="index.html" class="btn-hero-main">
+          <span>Launch Live Dashboard</span>
+          <span style="font-size: 18px;">➔</span>
+        </a>
+        <a href="#playground" class="btn-hero-outline">
+          <span>🤖 Try PulseAI Copilot</span>
+        </a>
+        <a href="register.html" class="btn-hero-outline">
+          <span>📝 Register Account</span>
+        </a>
+      </div>
+
+      <!-- Stats Ribbon -->
+      <div class="stats-ribbon">
+        <div class="stat-item">
+          <div class="stat-num">99.8%</div>
+          <div class="stat-lbl">Sprint Velocity Precision</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num">&lt; 200ms</div>
+          <div class="stat-lbl">SQLite Query Latency</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num">6 Roles</div>
+          <div class="stat-lbl">Role-Based Access Control</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num">0 NPM</div>
+          <div class="stat-lbl">Zero-Dependency Vanilla UI</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Live Interactive Copilot Playground -->
+    <section class="playground-section" id="playground">
+      <div class="section-header">
+        <div class="section-tag">Interactive AI Demonstration</div>
+        <h2 class="section-title">Experience PulseAI Copilot Live</h2>
+        <p class="section-subtitle">
+          Test the conversational AI assistant below. PulseAI reads real-time sprint data, budget allocations, and
+          delivery schedules from the SQLite database to answer your questions.
+        </p>
+      </div>
+
+      <div class="copilot-demo-card">
+        <div class="demo-card-top">
+          <div class="demo-top-info">
+            <div class="demo-avatar">🤖</div>
+            <div>
+              <h3 style="font-size: 16px; font-weight: 800;">PulseAI Project Intelligence</h3>
+              <p style="font-size: 12px; color: #a5b4fc;">Active Context: Smart City Monitoring (PRJ-101) • 78% Complete
+              </p>
+            </div>
+          </div>
+          <a href="copilot.html" class="btn-primary" style="padding: 7px 16px; font-size: 12px;">
+            <span>Open Copilot Studio</span>
+            <span>↗</span>
+          </a>
+        </div>
+
+        <div class="demo-chat-body" id="landingChatBody">
+          <div class="demo-bubble bot">
+            <div class="demo-msg-text">
+              👋 Welcome! I am <strong>PulseAI Copilot</strong>. I am continuously auditing real-time telemetry for
+              <strong>Smart City Monitoring (PRJ-101)</strong>.<br><br>
+              • <strong>Progress:</strong> 78% completed<br>
+              • <strong>Status:</strong> In Progress<br>
+              • <strong>Composite Risk Score:</strong> 21/100 (Low Risk)<br>
+              • <strong>Budget Burn:</strong> ₹1,42,500 of ₹1,80,000 allocated (79%)<br><br>
+              <em>Click any prompt button below to generate an instant telemetry audit!</em>
+            </div>
+          </div>
+        </div>
+
+        <div class="demo-chips-row">
+          <button type="button" class="demo-chip-btn" onclick="sendDemoPrompt('Executive Status & Overview')">📊
+            Executive Status</button>
+          <button type="button" class="demo-chip-btn"
+            onclick="sendDemoPrompt('Audit budget burn rate and remaining runway')">💰 Budget Audit</button>
+          <button type="button" class="demo-chip-btn"
+            onclick="sendDemoPrompt('Analyze delay risks and recommended mitigations')">⚠️ Delay & Risk
+            Analysis</button>
+          <button type="button" class="demo-chip-btn"
+            onclick="sendDemoPrompt('Show upcoming milestone timeline and sprint roadmap')">🎯 Milestone
+            Roadmap</button>
+          <button type="button" class="demo-chip-btn"
+            onclick="sendDemoPrompt('Give AI recommendations for on-time delivery')">💡 Next Actions</button>
+        </div>
+
+        <form class="demo-input-bar" id="landingChatForm" onsubmit="handleDemoChat(event)">
+          <input type="text" id="landingChatInput" class="demo-input"
+            placeholder="Ask PulseAI about this project's risks, budget, roadmap..." autocomplete="off">
+          <button type="submit" class="demo-send-btn">
+            <span>Ask PulseAI</span>
+            <span>➤</span>
+          </button>
+        </form>
+      </div>
+    </section>
+
+    <!-- Bento Grid Features -->
+    <section class="bento-section" id="features">
+      <div class="section-header">
+        <div class="section-tag">Core Architecture</div>
+        <h2 class="section-title">Built for Modern Engineering Squads</h2>
+        <p class="section-subtitle">
+          Everything you need to eliminate blind spots, forecast milestone bottlenecks, and govern project delivery with
+          precision.
+        </p>
+      </div>
+
+      <div class="bento-grid">
+        <div class="bento-card col-2">
+          <div>
+            <div class="bento-card-icon">📊</div>
+            <h3>Real-Time Telemetry & Health Gauges</h3>
+            <p>
+              Automated KPI trackers with dynamic Chart.js linear burn curves, circular SVG milestone completion gauges,
+              and phase sign-off logs. Instantly calculate velocity and variance across multi-squad deliverables.
+            </p>
+          </div>
+          <div
+            style="margin-top: 24px; padding: 14px; background: rgba(0,0,0,0.25); border-radius: 12px; border: 1px solid rgba(255,255,255,0.06); font-family: monospace; font-size: 12px; color: #a5b4fc;">
+            ✓ Real-time velocity score • ✓ Milestone sign-offs • ✓ Budget ratio burn
+          </div>
+        </div>
+
+        <div class="bento-card">
+          <div>
+            <div class="bento-card-icon">🤖</div>
+            <h3>PulseAI Copilot Studio</h3>
+            <p>
+              Conversational intelligence grounded in project SQLite parameters. Audits burn rates, highlights risks,
+              and provides algorithmic action items.
+            </p>
+          </div>
+          <a href="copilot.html"
+            style="color: #818cf8; font-size: 13px; font-weight: 700; text-decoration: none; margin-top: 18px; display: inline-flex; align-items: center; gap: 4px;">
+            <span>Launch Studio</span>
+            <span>→</span>
+          </a>
+        </div>
+
+        <div class="bento-card">
+          <div>
+            <div class="bento-card-icon">🔒</div>
+            <h3>Scoped Creator Workspace</h3>
+            <p>
+              Registered users get dedicated workspaces allowing them to create new projects and conduct focused
+              telemetry analysis on their initiatives.
+            </p>
+          </div>
+          <a href="register.html"
+            style="color: #818cf8; font-size: 13px; font-weight: 700; text-decoration: none; margin-top: 18px; display: inline-flex; align-items: center; gap: 4px;">
+            <span>Register Creator ID</span>
+            <span>→</span>
+          </a>
+        </div>
+
+        <div class="bento-card col-2">
+          <div>
+            <div class="bento-card-icon">💾</div>
+            <h3>SQLite Relational Persistence & REST API</h3>
+            <p>
+              High-performance Node.js & Express backend utilizing native SQLite (<code>projectpulse.db</code>).
+              Includes seamless client-side local storage fallback for 100% offline uptime and VS Code Live Server demo
+              capability.
+            </p>
+          </div>
+          <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 18px;">
+            <span
+              style="background: rgba(99,102,241,0.2); color: #c7d2fe; font-size: 11px; padding: 4px 10px; border-radius: 20px; font-weight: 700;">node:sqlite</span>
+            <span
+              style="background: rgba(99,102,241,0.2); color: #c7d2fe; font-size: 11px; padding: 4px 10px; border-radius: 20px; font-weight: 700;">Express
+              5050</span>
+            <span
+              style="background: rgba(99,102,241,0.2); color: #c7d2fe; font-size: 11px; padding: 4px 10px; border-radius: 20px; font-weight: 700;">localStorage
+              Fallback</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Bottom CTA Banner -->
+    <section class="bottom-cta-banner">
+      <h2>Transform Your Project Telemetry Today</h2>
+      <p>
+        Experience seamless project monitoring, automated risk prediction, and dedicated AI Copilot intelligence in one
+        unified control room.
+      </p>
+      <div style="display: flex; gap: 14px; justify-content: center; flex-wrap: wrap;">
+        <a href="index.html" class="btn-hero-main" style="box-shadow: 0 8px 25px rgba(0,0,0,0.4);">
+          <span>Enter Dashboard</span>
+          <span>➔</span>
+        </a>
+        <a href="copilot.html" class="btn-hero-outline">
+          <span>🤖 Open PulseAI Studio</span>
+        </a>
+        <a href="register.html" class="btn-hero-outline">
+          <span>Create Free Account</span>
+        </a>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="site-footer" aria-label="Site footer">
+      <div class="footer-brand">
+        <a href="landing.html" class="footer-brand-link">
+          <span>⚡</span>
+          <span>ProjectPulse</span>
+        </a>
+        <p>Monitor project delivery, follow risks, and keep every initiative moving with one clear view.</p>
+      </div>
+
+      <nav aria-label="Explore">
+        <h2 class="footer-heading">Explore</h2>
+        <ul class="footer-links">
+          <li><a href="#features">Features</a></li>
+          <li><a href="#playground">Copilot demo</a></li>
+          <li><a href="projects.html">Projects</a></li>
+        </ul>
+      </nav>
+
+      <nav aria-label="Account">
+        <h2 class="footer-heading">Account</h2>
+        <ul class="footer-links">
+          <li><a href="login.html">Sign in</a></li>
+          <li><a href="register.html">Create account</a></li>
+          <li><a href="index.html">Dashboard</a></li>
+        </ul>
+      </nav>
+
+      <div class="footer-bottom">
+        <span>© <span id="footerYear">2026</span> ProjectPulse</span>
+        <span>Project monitoring powered by SQLite.</span>
+      </div>
+    </footer>
+  </div>
+
+  <script src="api.js"></script>
+  <script>
+    document.getElementById('footerYear').textContent = new Date().getFullYear();
+
+    async function sendDemoPrompt(promptText) {
+      document.getElementById('landingChatInput').value = promptText;
+      const form = document.getElementById('landingChatForm');
+      form.dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }));
+    }
+
+    async function handleDemoChat(e) {
+      e.preventDefault();
+      const input = document.getElementById('landingChatInput');
+      const text = input.value.trim();
+      if (!text) return;
+
+      const body = document.getElementById('landingChatBody');
+
+      // User bubble
+      const userDiv = document.createElement('div');
+      userDiv.className = 'demo-bubble user';
+      userDiv.innerHTML = `<div class="demo-msg-text">${escapeHtml(text)}</div>`;
+      body.appendChild(userDiv);
+      input.value = '';
+      body.scrollTop = body.scrollHeight;
+
+      // Bot thinking
+      const thinkingDiv = document.createElement('div');
+      thinkingDiv.className = 'demo-bubble bot';
+      thinkingDiv.id = 'demoThinking';
+      thinkingDiv.innerHTML = `<div class="demo-msg-text"><em>🤖 PulseAI is analyzing real-time project metrics...</em></div>`;
+      body.appendChild(thinkingDiv);
+      body.scrollTop = body.scrollHeight;
+
+      try {
+        let reply = '';
+        if (window.ProjectPulseAPI && window.ProjectPulseAPI.chat) {
+          const res = await window.ProjectPulseAPI.chat('PRJ-101', text);
+          if (res && res.reply) reply = res.reply;
+        }
+
+        if (!reply) {
+          reply = `📊 **Telemetry Audit for Smart City Monitoring (PRJ-101)**:\n\n• **Progress:** 78% completed\n• **Status:** In Progress\n• **Remaining Budget:** ₹37,500 runway\n• **Upcoming Gate:** Phase 4 QA integration validation.\n\n✓ *Project velocity is aligned with target delivery.*`;
+        }
+
+        thinkingDiv.remove();
+
+        const botDiv = document.createElement('div');
+        botDiv.className = 'demo-bubble bot';
+        botDiv.innerHTML = `<div class="demo-msg-text">${formatMarkdown(reply)}</div>`;
+        body.appendChild(botDiv);
+        body.scrollTop = body.scrollHeight;
+      } catch (err) {
+        if (thinkingDiv) thinkingDiv.remove();
+        console.error(err);
+      }
+    }
+
+    function escapeHtml(str) {
+      return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+
+    function formatMarkdown(text) {
+      let f = escapeHtml(text);
+      f = f.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+      f = f.replace(/\*(.*?)\*/g, '<em>$1</em>');
+      return f.replace(/\n/g, '<br>');
+    }
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,1299 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ProjectPulse | Projects Management</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --primary: #4f46e5;
+      --primary-gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #d946ef 100%);
+      --sidebar-bg: #090d16;
+      --sidebar-hover: #131b2e;
+      --main-bg: #f8fafc;
+      --card-bg: #ffffff;
+      --text: #0f172a;
+      --muted: #64748b;
+      --border: #e2e8f0;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --radius: 16px;
+      --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.03);
+      --shadow-lg: 0 20px 35px -5px rgba(99, 102, 241, 0.14), 0 10px 15px -5px rgba(0, 0, 0, 0.04);
+      --ease-spring: cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', sans-serif;
+    }
+
+    body {
+      background-color: var(--main-bg);
+      background-image:
+        radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.06) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(217, 70, 239, 0.05) 0px, transparent 50%);
+      color: var(--text);
+      display: flex;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Sidebar Navigation */
+    .sidebar {
+      width: 270px;
+      background: var(--sidebar-bg);
+      color: #f8fafc;
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+      transition: all 0.35s var(--ease-spring);
+      z-index: 100;
+      border-right: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .sidebar-brand {
+      padding: 26px 22px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+    }
+
+    .brand-logo-icon {
+      width: 42px;
+      height: 42px;
+      background: var(--primary-gradient);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      box-shadow: 0 0 25px rgba(99, 102, 241, 0.5);
+    }
+
+    .brand-title {
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: -0.6px;
+      color: #ffffff;
+    }
+
+    .brand-subtitle {
+      font-size: 11px;
+      color: #94a3b8;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+    }
+
+    .sidebar-nav {
+      padding: 22px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      flex-grow: 1;
+    }
+
+    .nav-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      color: #475569;
+      padding: 12px 12px 6px 12px;
+      font-weight: 800;
+    }
+
+    .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      color: #94a3b8;
+      text-decoration: none;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 600;
+      transition: all 0.25s var(--ease-spring);
+    }
+
+    .nav-link:hover {
+      background: var(--sidebar-hover);
+      color: #ffffff;
+      transform: translateX(3px);
+    }
+
+    .nav-link.active {
+      background: var(--primary-gradient);
+      color: #ffffff;
+      box-shadow: 0 8px 20px rgba(99, 102, 241, 0.35);
+    }
+
+    .nav-icon {
+      font-size: 18px;
+      width: 24px;
+      text-align: center;
+    }
+
+    .sidebar-footer {
+      padding: 20px 18px;
+      border-top: 1px solid rgba(255, 255, 255, 0.07);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: #050811;
+    }
+
+    .user-avatar-sm {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--primary-gradient);
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 15px;
+      box-shadow: 0 0 15px rgba(99, 102, 241, 0.4);
+    }
+
+    .user-meta-info {
+      flex: 1;
+      overflow: hidden;
+    }
+
+    .user-name {
+      font-size: 13px;
+      font-weight: 700;
+      color: #ffffff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .user-role-badge {
+      font-size: 11px;
+      color: #a5b4fc;
+    }
+
+    /* Main Area */
+    .main-wrapper {
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      overflow-y: auto;
+    }
+
+    .top-header {
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 36px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 90;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .mobile-toggle {
+      display: none;
+      background: none;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+      color: var(--text);
+    }
+
+    .header-title-block h1 {
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: -0.6px;
+    }
+
+    .header-title-block p {
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    .page-content {
+      padding: 34px 36px;
+      max-width: 1480px;
+      width: 100%;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 26px;
+    }
+
+    /* Controls Bar */
+    .controls-bar {
+      background: #ffffff;
+      padding: 18px 24px;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .search-filter-group {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+      flex: 1;
+    }
+
+    .search-input-wrap {
+      position: relative;
+      min-width: 280px;
+      flex: 1;
+      max-width: 420px;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 11px 16px 11px 40px;
+      font-size: 14px;
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      outline: none;
+      transition: all 0.25s ease;
+      background: #f8fafc;
+    }
+
+    .search-input:focus {
+      background: #ffffff;
+      border-color: #6366f1;
+      box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.12);
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    .filter-select {
+      padding: 11px 16px;
+      font-size: 14px;
+      font-weight: 600;
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      outline: none;
+      background: white;
+      color: var(--text);
+      cursor: pointer;
+      transition: border 0.2s;
+    }
+
+    .filter-select:focus {
+      border-color: #6366f1;
+    }
+
+    .btn-create-project {
+      background: var(--primary-gradient);
+      color: #ffffff;
+      padding: 12px 22px;
+      border: none;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.3s var(--ease-spring);
+      box-shadow: 0 6px 18px rgba(99, 102, 241, 0.35);
+    }
+
+    .btn-create-project:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(168, 85, 247, 0.45);
+    }
+
+    /* Projects Grid */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+      gap: 24px;
+    }
+
+    .project-card {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      border: 1.5px solid var(--border);
+      padding: 26px;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: all 0.3s var(--ease-spring);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .project-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-lg);
+      border-color: #c7d2fe;
+    }
+
+    .card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 14px;
+    }
+
+    .project-code {
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--primary);
+      background: #eef2ff;
+      padding: 4px 10px;
+      border-radius: 8px;
+      letter-spacing: 0.5px;
+    }
+
+    .status-badge {
+      padding: 5px 12px;
+      border-radius: 9999px;
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: capitalize;
+    }
+
+    .status-in-progress {
+      background: #e0e7ff;
+      color: #4338ca;
+    }
+
+    .status-completed {
+      background: #dcfce7;
+      color: #15803d;
+    }
+
+    .status-delayed {
+      background: #fee2e2;
+      color: #b91c1c;
+    }
+
+    .status-planned {
+      background: #fef3c7;
+      color: #b45309;
+    }
+
+    .project-title {
+      font-size: 19px;
+      font-weight: 800;
+      color: var(--text);
+      margin-bottom: 8px;
+      line-height: 1.3;
+      letter-spacing: -0.4px;
+    }
+
+    .project-desc {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.6;
+      margin-bottom: 22px;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      min-height: 42px;
+    }
+
+    .progress-section {
+      margin-bottom: 22px;
+    }
+
+    .progress-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .progress-bar-bg {
+      width: 100%;
+      height: 9px;
+      background: #e2e8f0;
+      border-radius: 9999px;
+      overflow: hidden;
+    }
+
+    .progress-bar-val {
+      height: 100%;
+      border-radius: 9999px;
+      background: var(--primary-gradient);
+      transition: width 0.6s var(--ease-spring);
+    }
+
+    .meta-footer {
+      border-top: 1px solid var(--border);
+      padding-top: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .meta-group {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .meta-item {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-weight: 500;
+    }
+
+    .btn-view-details {
+      background: #f8fafc;
+      color: var(--primary);
+      border: 1.5px solid #cbd5e1;
+      padding: 8px 16px;
+      border-radius: 10px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.25s var(--ease-spring);
+    }
+
+    .btn-view-details:hover {
+      background: var(--primary-gradient);
+      color: #ffffff;
+      border-color: transparent;
+      transform: scale(1.04);
+      box-shadow: 0 4px 14px rgba(99, 102, 241, 0.35);
+    }
+
+    /* Modal Form */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(9, 13, 22, 0.65);
+      backdrop-filter: blur(8px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+
+    .modal-card {
+      background: #ffffff;
+      width: 90%;
+      max-width: 540px;
+      border-radius: 20px;
+      padding: 32px;
+      box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.3);
+      position: relative;
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 22px;
+    }
+
+    .modal-title {
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+    }
+
+    .modal-close {
+      background: none;
+      border: none;
+      font-size: 22px;
+      cursor: pointer;
+      color: var(--muted);
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 13px;
+      font-weight: 700;
+      color: #334155;
+      margin-bottom: 6px;
+    }
+
+    .form-input,
+    .form-textarea,
+    .form-select {
+      width: 100%;
+      padding: 11px 14px;
+      font-size: 14px;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      outline: none;
+      background: #f8fafc;
+      color: var(--text);
+      transition: all 0.2s;
+    }
+
+    .form-textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    .form-input:focus,
+    .form-textarea:focus,
+    .form-select:focus {
+      background: #ffffff;
+      border-color: #6366f1;
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.12);
+    }
+
+    .form-row-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+      margin-top: 26px;
+    }
+
+    .btn-cancel {
+      padding: 11px 18px;
+      background: #f1f5f9;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: 700;
+      color: #475569;
+    }
+
+    .btn-save {
+      padding: 11px 22px;
+      background: var(--primary-gradient);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: 700;
+      box-shadow: 0 6px 16px rgba(99, 102, 241, 0.35);
+    }
+
+    /* Folder Upload / Selection Zone */
+    .folder-upload-zone {
+      border: 2px dashed #c7d2fe;
+      background: #f8faff;
+      border-radius: 14px;
+      padding: 16px 18px;
+      cursor: pointer;
+      transition: all 0.25s var(--ease-spring);
+      margin-bottom: 18px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .folder-upload-zone:hover {
+      border-color: #6366f1;
+      background: #eef2ff;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 15px rgba(99, 102, 241, 0.1);
+    }
+
+    .folder-icon-circle {
+      width: 46px;
+      height: 46px;
+      border-radius: 12px;
+      background: var(--primary-gradient);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.35);
+      flex-shrink: 0;
+    }
+
+    .folder-text-group {
+      flex: 1;
+      text-align: left;
+    }
+
+    .folder-main-text {
+      font-size: 13.5px;
+      font-weight: 800;
+      color: var(--text);
+    }
+
+    .folder-sub-text {
+      font-size: 11.5px;
+      color: var(--muted);
+      margin-top: 2px;
+      line-height: 1.4;
+    }
+
+    .btn-browse-folder {
+      padding: 7px 14px;
+      background: #ffffff;
+      border: 1.5px solid #c7d2fe;
+      color: var(--primary);
+      border-radius: 10px;
+      font-size: 12px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+
+    .folder-upload-zone:hover .btn-browse-folder {
+      background: var(--primary);
+      color: #ffffff;
+      border-color: var(--primary);
+    }
+
+    .folder-summary-card {
+      display: none;
+      background: #f0fdf4;
+      border: 1.5px solid #86efac;
+      border-radius: 12px;
+      padding: 12px 16px;
+      margin-bottom: 18px;
+      align-items: center;
+      justify-content: space-between;
+      animation: fadeIn 0.3s;
+    }
+
+    @media (max-width: 768px) {
+      .sidebar {
+        position: fixed;
+        left: -270px;
+        top: 0;
+        bottom: 0;
+      }
+
+      .sidebar.open {
+        left: 0;
+      }
+
+      .mobile-toggle {
+        display: block;
+      }
+
+      .top-header {
+        padding: 14px 20px;
+      }
+
+      .page-content {
+        padding: 20px;
+      }
+
+      .projects-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-logo-icon">⚡</div>
+      <div>
+        <div class="brand-title">ProjectPulse</div>
+        <div class="brand-subtitle">Monitor. Manage. Deliver.</div>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <div class="nav-label">Navigation</div>
+      <a href="index.html" class="nav-link">
+        <span class="nav-icon">📊</span>
+        <span>Dashboard</span>
+      </a>
+      <a href="projects.html" class="nav-link active">
+        <span class="nav-icon">📁</span>
+        <span>Projects</span>
+      </a>
+      <a href="copilot.html" class="nav-link">
+        <span class="nav-icon">🤖</span>
+        <span>PulseAI Copilot</span>
+        <span
+          style="margin-left: auto; font-size: 10px; background: rgba(99, 102, 241, 0.25); color: #a5b4fc; padding: 2px 7px; border-radius: 999px; font-weight: 700;">AI</span>
+      </a>
+      <a href="project-details.html" class="nav-link">
+        <span class="nav-icon">🎯</span>
+        <span>Tasks & Milestones</span>
+      </a>
+      <a href="team.html" class="nav-link">
+        <span class="nav-icon">👥</span>
+        <span>Team Members</span>
+      </a>
+      <a href="reports.html" class="nav-link">
+        <span class="nav-icon">📈</span>
+        <span>Reports</span>
+      </a>
+      <a href="risk-monitor.html" class="nav-link">
+        <span class="nav-icon">⚠️</span>
+        <span>Risk Monitor</span>
+      </a>
+
+      <div class="nav-label">Preferences</div>
+      <a href="#" class="nav-link" onclick="handleLogout(); return false;" style="color: #f87171;">
+        <span class="nav-icon">🚪</span>
+        <span>Logout</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="user-avatar-sm" id="sidebarAvatar">A</div>
+      <div class="user-meta-info">
+        <div class="user-name" id="sidebarUserName">Alex Rivera</div>
+        <div class="user-role-badge" id="sidebarUserRole">Administrator</div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main Workspace -->
+  <div class="main-wrapper">
+    <header class="top-header">
+      <div class="header-left">
+        <button class="mobile-toggle" onclick="toggleSidebar()">☰</button>
+        <div class="header-title-block">
+          <h1>Project Portfolio Management</h1>
+          <p>Supervise active initiatives, inspect milestone schedules, and trigger SQLite sync.</p>
+        </div>
+      </div>
+    </header>
+
+    <main class="page-content">
+      <!-- User Scope Banner -->
+      <div id="scopedUserBanner"
+        style="display: none; background: linear-gradient(135deg, rgba(79, 70, 229, 0.08) 0%, rgba(139, 92, 246, 0.08) 100%); border: 1.5px solid rgba(99, 102, 241, 0.25); border-radius: 16px; padding: 18px 24px; margin-bottom: 24px; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px;">
+        <div style="display: flex; align-items: center; gap: 14px;">
+          <div
+            style="width: 44px; height: 44px; border-radius: 12px; background: var(--primary-gradient); display: flex; align-items: center; justify-content: center; font-size: 22px; color: white; box-shadow: 0 4px 15px rgba(99,102,241,0.3);">
+            🚀
+          </div>
+          <div>
+            <div style="font-weight: 800; font-size: 15px; color: var(--text);">
+              Personal Project Workspace: <span id="bannerUserName" style="color: var(--primary);">User</span>
+            </div>
+            <div style="font-size: 12px; color: var(--muted); margin-top: 2px;">
+              Create your initiatives, supervise milestone health, and launch real-time PulseAI Copilot analysis.
+            </div>
+          </div>
+        </div>
+        <div style="display: flex; gap: 10px; align-items: center;">
+          <button class="btn-create-project" onclick="openAddProjectModal()"
+            style="padding: 10px 18px; font-size: 13px;">
+            <span>+ Add Project</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Search, Filter & Action Bar -->
+      <section class="controls-bar">
+        <div class="search-filter-group">
+          <div class="search-input-wrap">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="projectSearchInput" class="search-input"
+              placeholder="Search projects by name or code..." oninput="filterProjects()">
+          </div>
+
+          <select id="statusFilter" class="filter-select" onchange="filterProjects()">
+            <option value="All">All Statuses</option>
+            <option value="In Progress">In Progress</option>
+            <option value="Completed">Completed</option>
+            <option value="Delayed">Delayed</option>
+            <option value="Planned">Planned</option>
+          </select>
+        </div>
+
+        <button class="btn-create-project" onclick="openAddProjectModal()">
+          <span>+</span>
+          <span>Add New Project</span>
+        </button>
+      </section>
+
+      <!-- Projects Grid -->
+      <section class="projects-grid" id="projectsContainer">
+        <!-- Rendered dynamically -->
+      </section>
+    </main>
+  </div>
+
+  <!-- Add Project Modal -->
+  <div class="modal-overlay" id="addProjectModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h2 class="modal-title">Create New Enterprise Project</h2>
+        <button class="modal-close" onclick="closeAddProjectModal()">✕</button>
+      </div>
+
+      <!-- Quick Folder Upload / Selection Dropzone -->
+      <div class="folder-upload-zone" id="folderDropZone"
+        onclick="document.getElementById('projectFolderInput').click()">
+        <input type="file" id="projectFolderInput" webkitdirectory directory multiple style="display: none;"
+          onchange="handleFolderSelect(event)">
+        <div class="folder-icon-circle">📂</div>
+        <div class="folder-text-group">
+          <div class="folder-main-text">Select Project Folder from Your Computer</div>
+          <div class="folder-sub-text">Choose your local codebase folder to auto-detect project name, files count & tech
+            stack.</div>
+        </div>
+        <button type="button" class="btn-browse-folder">Choose Folder</button>
+      </div>
+
+      <!-- Scanned Folder Feedback Card -->
+      <div id="folderSummaryCard" class="folder-summary-card">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <span style="font-size: 22px;">📁</span>
+          <div>
+            <div style="font-weight: 800; font-size: 13.5px; color: #15803d;" id="summaryFolderName">folder_name</div>
+            <div style="font-size: 11.5px; color: #166534;" id="summaryFolderStats">0 files scanned • Ready to import
+            </div>
+          </div>
+        </div>
+        <button type="button" onclick="clearSelectedFolder(event)"
+          style="background: none; border: none; font-size: 16px; color: #15803d; cursor: pointer; padding: 4px;"
+          title="Remove folder">✕</button>
+      </div>
+
+      <form id="newProjectForm" onsubmit="handleCreateProject(event)">
+        <div id="projectFormError" role="alert" aria-live="polite"
+          style="display: none; color: #b91c1c; background: #fef2f2; border: 1px solid #fecaca; border-radius: 8px; padding: 10px 12px; font-size: 13px;">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="newProjectName">Project Name</label>
+          <input type="text" id="newProjectName" class="form-input" placeholder="e.g. NextGen Telehealth Cloud Platform"
+            required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="newProjectDesc">Description & Scope</label>
+          <textarea id="newProjectDesc" class="form-textarea"
+            placeholder="Outline primary architecture, objectives, and deliverables..." required></textarea>
+        </div>
+
+        <div class="form-row-2">
+          <div class="form-group">
+            <label class="form-label" for="newProjectStatus">Lifecycle Status</label>
+            <select id="newProjectStatus" class="form-select">
+              <option value="Planned">Planned</option>
+              <option value="In Progress">In Progress</option>
+              <option value="Delayed">Delayed</option>
+              <option value="Completed">Completed</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="newProjectDeadline">Target Deadline</label>
+            <input type="date" id="newProjectDeadline" class="form-input" required>
+          </div>
+        </div>
+
+        <div class="form-row-2">
+          <div class="form-group">
+            <label class="form-label" for="newProjectTeam">Team Capacity (Members)</label>
+            <input type="number" id="newProjectTeam" class="form-input" min="1" max="50" value="6" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="newProjectProgress">Initial Progress (%)</label>
+            <input type="number" id="newProjectProgress" class="form-input" min="0" max="100" value="0" required>
+          </div>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn-cancel" onclick="closeAddProjectModal()">Cancel</button>
+          <button type="submit" class="btn-save">Save to SQLite Database</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="api.js"></script>
+  <script>
+    let currentUser = null;
+    let activeScope = 'all'; // 'my' or 'all'
+
+    // Auth Check
+    const storedUser = localStorage.getItem('projectPulseUser');
+    if (!storedUser) {
+      window.location.href = 'login.html';
+    } else {
+      currentUser = JSON.parse(storedUser);
+      document.getElementById('sidebarUserName').textContent = currentUser.name || 'User';
+      document.getElementById('sidebarUserRole').textContent = currentUser.role || 'Member';
+      document.getElementById('sidebarAvatar').textContent = (currentUser.name || 'U').charAt(0);
+
+      // Check if user is a standard registered user / Project Creator
+      const isScoped = currentUser.role !== 'Administrator';
+      if (isScoped) {
+        activeScope = 'my';
+        const banner = document.getElementById('scopedUserBanner');
+        if (banner) {
+          banner.style.display = 'flex';
+          document.getElementById('bannerUserName').textContent = currentUser.name;
+        }
+      }
+    }
+
+    function setProjectScope(scope) {
+      activeScope = currentUser && currentUser.role === 'Administrator' ? scope : 'my';
+      const myBtn = document.getElementById('scopeMyBtn');
+      const allBtn = document.getElementById('scopeAllBtn');
+      if (myBtn && allBtn) {
+        if (scope === 'my') {
+          myBtn.style.background = 'white';
+          myBtn.style.color = 'var(--primary)';
+          myBtn.style.boxShadow = '0 2px 4px rgba(0,0,0,0.06)';
+          allBtn.style.background = 'transparent';
+          allBtn.style.color = 'var(--muted)';
+          allBtn.style.boxShadow = 'none';
+        } else {
+          allBtn.style.background = 'white';
+          allBtn.style.color = 'var(--primary)';
+          allBtn.style.boxShadow = '0 2px 4px rgba(0,0,0,0.06)';
+          myBtn.style.background = 'transparent';
+          myBtn.style.color = 'var(--muted)';
+          myBtn.style.boxShadow = 'none';
+        }
+      }
+      filterProjects();
+    }
+
+    function handleLogout() {
+      if (confirm('Sign out from ProjectPulse?')) {
+        localStorage.removeItem('projectPulseUser');
+        window.location.href = 'login.html';
+      }
+    }
+
+    function toggleSidebar() {
+      document.getElementById('sidebar').classList.toggle('open');
+    }
+
+    async function loadProjects() {
+      if (window.ProjectPulseAPI) {
+        return await window.ProjectPulseAPI.getProjects();
+      }
+      return JSON.parse(localStorage.getItem('projectPulseProjects') || '[]');
+    }
+
+    function renderProjects(projectsList) {
+      const container = document.getElementById('projectsContainer');
+      container.innerHTML = '';
+
+      if (projectsList.length === 0) {
+        if (activeScope === 'my') {
+          container.innerHTML = `
+            <div style="grid-column: 1 / -1; text-align: center; padding: 60px 24px; background: white; border-radius: 20px; border: 2px dashed #cbd5e1; box-shadow: var(--shadow);">
+              <div style="width: 60px; height: 60px; margin: 0 auto 16px; border-radius: 50%; background: #eef2ff; display: flex; align-items: center; justify-content: center; font-size: 30px;">🚀</div>
+              <h3 style="font-size: 20px; font-weight: 800; color: var(--text);">No projects registered yet</h3>
+              <p style="color: var(--muted); font-size: 14px; max-width: 480px; margin: 8px auto 22px;">
+                You haven't created any initiatives yet. Create your first project to start tracking its progress and risks.
+              </p>
+              <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+                <button class="btn-create-project" onclick="openAddProjectModal()">
+                  <span>+ Create First Project</span>
+                </button>
+              </div>
+            </div>
+          `;
+        } else {
+          container.innerHTML = `
+            <div style="grid-column: 1 / -1; text-align: center; padding: 70px 20px; background: white; border-radius: 16px; border: 1.5px dashed #cbd5e1;">
+              <div style="font-size: 40px; margin-bottom: 12px;">📁</div>
+              <h3 style="font-size: 19px; font-weight: 800;">No projects match your filter</h3>
+              <p style="color: var(--muted); font-size: 14px; margin-top: 6px;">Try adjusting your search criteria or register a new project.</p>
+            </div>
+          `;
+        }
+        return;
+      }
+
+      projectsList.forEach(prj => {
+        let badgeClass = 'status-in-progress';
+        if (prj.status === 'Completed') badgeClass = 'status-completed';
+        if (prj.status === 'Delayed') badgeClass = 'status-delayed';
+        if (prj.status === 'Planned') badgeClass = 'status-planned';
+
+        const teamCount = prj.team_size || prj.teamSize || 6;
+        const progressVal = prj.progress !== undefined ? prj.progress : 0;
+        const isMine = currentUser && (prj.created_by === currentUser.email || prj.createdBy === currentUser.email);
+
+        const card = document.createElement('div');
+        card.className = 'project-card';
+        card.innerHTML = `
+          <div>
+            <div class="card-top">
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <span class="project-code">${prj.id}</span>
+                ${isMine ? `<span style="background: #e0e7ff; color: #4338ca; font-size: 10px; font-weight: 800; padding: 2px 7px; border-radius: 6px;">MINE</span>` : ''}
+              </div>
+              <span class="status-badge ${badgeClass}">${prj.status}</span>
+            </div>
+            <h2 class="project-title">${prj.name}</h2>
+            ${prj.folder_name ? `
+              <div style="margin: 4px 0 8px 0;">
+                <span style="background: #ecfdf5; color: #047857; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 6px; border: 1px solid #a7f3d0; display: inline-flex; align-items: center; gap: 5px;">
+                  <span>📂</span>
+                  <span>${prj.folder_name}</span>
+                  <span style="color: #059669; font-weight: 500;">(${prj.files_count || 0} files)</span>
+                </span>
+              </div>
+            ` : ''}
+            <p class="project-desc">${prj.description || 'Enterprise technical initiative.'}</p>
+            <div class="progress-section">
+              <div class="progress-header">
+                <span>Milestone Progress</span>
+                <span style="font-weight: 800; color: var(--primary);">${progressVal}%</span>
+              </div>
+              <div class="progress-bar-bg">
+                <div class="progress-bar-val" style="width: ${progressVal}%;"></div>
+              </div>
+            </div>
+          </div>
+          <div class="meta-footer">
+            <div class="meta-group">
+              <span class="meta-item" title="Assigned Team Squad">👥 ${teamCount} members</span>
+              <span class="meta-item" title="Target Deadline">📅 ${prj.deadline}</span>
+            </div>
+            <button class="btn-view-details" onclick="viewDetails('${prj.id}')" style="background: var(--primary-gradient); color: white; border: none; padding: 8px 16px; border-radius: 10px; font-weight: 700; font-size: 13px; cursor: pointer; display: flex; align-items: center; gap: 6px; box-shadow: 0 4px 12px rgba(99,102,241,0.25);">
+              <span>Analyze & Copilot</span>
+              <span>🤖</span>
+            </button>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    async function filterProjects() {
+      const search = document.getElementById('projectSearchInput').value.toLowerCase();
+      const status = document.getElementById('statusFilter').value;
+      const allProjects = await loadProjects();
+
+      const filtered = allProjects.filter(p => {
+        const matchesSearch = (p.name && p.name.toLowerCase().includes(search)) || (p.id && p.id.toLowerCase().includes(search));
+        const matchesStatus = status === 'All' || p.status === status;
+
+        const matchesScope = currentUser && currentUser.role === 'Administrator'
+          ? true
+          : !!currentUser && (p.created_by === currentUser.email || p.createdBy === currentUser.email);
+
+        return matchesSearch && matchesStatus && matchesScope;
+      });
+
+      renderProjects(filtered);
+    }
+
+    async function viewDetails(projectId) {
+      const all = await loadProjects();
+      const selected = all.find(p => p.id === projectId);
+      if (selected) {
+        localStorage.setItem('projectPulseSelectedProject', JSON.stringify(selected));
+      }
+      window.location.href = `project-details.html?id=${projectId}`;
+    }
+
+    let selectedFolderMeta = null;
+
+    function handleFolderSelect(event) {
+      const files = event.target.files;
+      if (!files || files.length === 0) return;
+
+      // Extract folder name from the first file's relative path: "folderName/subpath/file.ext"
+      const relativePath = files[0].webkitRelativePath || '';
+      const folderName = relativePath.split('/')[0] || 'Selected Project Folder';
+
+      // Count files and scan extensions
+      const totalFiles = files.length;
+      const extCounts = {};
+      for (let i = 0; i < files.length; i++) {
+        const f = files[i];
+        const parts = f.name.split('.');
+        if (parts.length > 1) {
+          const ext = parts.pop().toLowerCase();
+          extCounts[ext] = (extCounts[ext] || 0) + 1;
+        }
+      }
+
+      // Detect key technologies
+      const tech = [];
+      if (extCounts.js || extCounts.jsx || extCounts.ts || extCounts.tsx) tech.push('JavaScript/TypeScript');
+      if (extCounts.py) tech.push('Python');
+      if (extCounts.html) tech.push('HTML5');
+      if (extCounts.css || extCounts.scss) tech.push('CSS3');
+      if (extCounts.json) tech.push('JSON');
+      if (extCounts.sql || extCounts.db) tech.push('SQL Database');
+      if (extCounts.java) tech.push('Java');
+      if (extCounts.cpp || extCounts.c) tech.push('C/C++');
+
+      const techStackStr = tech.length > 0 ? tech.slice(0, 3).join(', ') : 'Source Code';
+
+      selectedFolderMeta = {
+        folderName: folderName,
+        filesCount: totalFiles,
+        techStack: techStackStr
+      };
+
+      // Auto-populate Project Name
+      const nameInput = document.getElementById('newProjectName');
+      const formattedName = folderName
+        .replace(/[-_]/g, ' ')
+        .replace(/\b\w/g, c => c.toUpperCase());
+      nameInput.value = formattedName;
+
+      // Auto-generate Description & Scope
+      const descInput = document.getElementById('newProjectDesc');
+      descInput.value = `Imported codebase from local folder "${folderName}". Includes ${totalFiles} scanned files (${techStackStr}). Monitored via ProjectPulse telemetry and PulseAI Copilot.`;
+
+      // Show summary feedback card
+      document.getElementById('summaryFolderName').textContent = `📂 ${folderName}`;
+      document.getElementById('summaryFolderStats').textContent = `✓ ${totalFiles} files detected • ${techStackStr}`;
+      document.getElementById('folderSummaryCard').style.display = 'flex';
+    }
+
+    function clearSelectedFolder(event) {
+      if (event) event.stopPropagation();
+      selectedFolderMeta = null;
+      document.getElementById('projectFolderInput').value = '';
+      document.getElementById('folderSummaryCard').style.display = 'none';
+    }
+
+    function openAddProjectModal() {
+      document.getElementById('addProjectModal').style.display = 'flex';
+      clearSelectedFolder();
+      const today = new Date();
+      today.setDate(today.getDate() + 30);
+      document.getElementById('newProjectDeadline').value = today.toISOString().split('T')[0];
+    }
+
+    function closeAddProjectModal() {
+      document.getElementById('addProjectModal').style.display = 'none';
+      document.getElementById('newProjectForm').reset();
+      clearSelectedFolder();
+    }
+
+    async function handleCreateProject(e) {
+      e.preventDefault();
+      const errorMessage = document.getElementById('projectFormError');
+      const submitButton = document.querySelector('#newProjectForm button[type="submit"]');
+      errorMessage.textContent = '';
+      errorMessage.style.display = 'none';
+      submitButton.disabled = true;
+      submitButton.textContent = 'Saving...';
+
+      try {
+        const name = document.getElementById('newProjectName').value.trim();
+        const description = document.getElementById('newProjectDesc').value.trim();
+        const status = document.getElementById('newProjectStatus').value;
+        const deadline = document.getElementById('newProjectDeadline').value;
+        const teamSize = parseInt(document.getElementById('newProjectTeam').value) || 5;
+        const progress = parseInt(document.getElementById('newProjectProgress').value) || 0;
+
+        const projectData = {
+          name,
+          description,
+          status,
+          deadline,
+          teamSize,
+          progress,
+          folderName: selectedFolderMeta ? selectedFolderMeta.folderName : '',
+          filesCount: selectedFolderMeta ? selectedFolderMeta.filesCount : 0,
+          techStack: selectedFolderMeta ? selectedFolderMeta.techStack : '',
+          createdBy: currentUser ? currentUser.email : 'admin@projectpulse.com'
+        };
+
+        let created = null;
+        if (window.ProjectPulseAPI) {
+          created = await window.ProjectPulseAPI.createProject(projectData);
+        } else {
+          const projects = JSON.parse(localStorage.getItem('projectPulseProjects') || '[]');
+          const nextId = `PRJ-${100 + projects.length + 1}`;
+          created = {
+            id: nextId,
+            ...projectData,
+            created_by: projectData.createdBy,
+            folder_name: projectData.folderName,
+            files_count: projectData.filesCount,
+            tech_stack: projectData.techStack,
+            budget: 150000,
+            budgetUsed: Math.round((progress / 100) * 150000)
+          };
+          projects.unshift(created);
+          localStorage.setItem('projectPulseProjects', JSON.stringify(projects));
+        }
+
+        closeAddProjectModal();
+        // Ensure we switch to 'my' scope to showcase their new project
+        if (currentUser && currentUser.role !== 'Administrator') {
+          setProjectScope('my');
+        } else {
+          await filterProjects();
+        }
+        alert(`✓ Project "${name}" registered successfully!\n📂 Folder: ${projectData.folderName || 'None'}\nCreated by: ${projectData.createdBy}`);
+      } catch (error) {
+        errorMessage.textContent = error.message || 'Could not save the project. Please try again.';
+        errorMessage.style.display = 'block';
+      } finally {
+        submitButton.disabled = false;
+        submitButton.textContent = 'Save to SQLite Database';
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', async () => {
+      // If scoped user has no projects of their own yet, we can check
+      const all = await loadProjects();
+      if (currentUser && activeScope === 'my') {
+        const myCount = all.filter(p => p.created_by === currentUser.email || p.createdBy === currentUser.email).length;
+        if (myCount === 0) {
+          // If no projects created by them yet, but they just registered, show prompt or toggle
+        }
+      }
+      await filterProjects();
+    });
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,1312 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ProjectPulse | Executive Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    :root {
+      --primary: #4f46e5;
+      --primary-dark: #3730a3;
+      --primary-gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #d946ef 100%);
+      --sidebar-bg: #090d16;
+      --sidebar-hover: #131b2e;
+      --main-bg: #f8fafc;
+      --card-bg: #ffffff;
+      --text: #0f172a;
+      --muted: #64748b;
+      --border: #e2e8f0;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --radius: 16px;
+      --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
+      --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.03);
+      --shadow-lg: 0 20px 35px -5px rgba(99, 102, 241, 0.12), 0 10px 15px -5px rgba(0, 0, 0, 0.04);
+      --ease-spring: cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', sans-serif;
+    }
+
+    body {
+      background-color: var(--main-bg);
+      background-image:
+        radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.06) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(217, 70, 239, 0.05) 0px, transparent 50%);
+      color: var(--text);
+      display: flex;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Sidebar Navigation */
+    .sidebar {
+      width: 270px;
+      background: var(--sidebar-bg);
+      color: #f8fafc;
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+      transition: all 0.35s var(--ease-spring);
+      z-index: 100;
+      border-right: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .sidebar-brand {
+      padding: 26px 22px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+    }
+
+    .brand-logo-icon {
+      width: 42px;
+      height: 42px;
+      background: var(--primary-gradient);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      box-shadow: 0 0 25px rgba(99, 102, 241, 0.5);
+    }
+
+    .brand-title {
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: -0.6px;
+      color: #ffffff;
+    }
+
+    .brand-subtitle {
+      font-size: 11px;
+      color: #94a3b8;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+    }
+
+    .sidebar-nav {
+      padding: 22px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      flex-grow: 1;
+    }
+
+    .nav-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      color: #475569;
+      padding: 12px 12px 6px 12px;
+      font-weight: 800;
+    }
+
+    .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      color: #94a3b8;
+      text-decoration: none;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 600;
+      transition: all 0.25s var(--ease-spring);
+      position: relative;
+    }
+
+    .nav-link:hover {
+      background: var(--sidebar-hover);
+      color: #ffffff;
+      transform: translateX(3px);
+    }
+
+    .nav-link.active {
+      background: var(--primary-gradient);
+      color: #ffffff;
+      box-shadow: 0 8px 20px rgba(99, 102, 241, 0.35);
+    }
+
+    .nav-icon {
+      font-size: 18px;
+      width: 24px;
+      text-align: center;
+    }
+
+    .sidebar-footer {
+      padding: 20px 18px;
+      border-top: 1px solid rgba(255, 255, 255, 0.07);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: #050811;
+    }
+
+    .user-avatar-sm {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--primary-gradient);
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 15px;
+      box-shadow: 0 0 15px rgba(99, 102, 241, 0.4);
+    }
+
+    .user-meta-info {
+      flex: 1;
+      overflow: hidden;
+    }
+
+    .user-name {
+      font-size: 13px;
+      font-weight: 700;
+      color: #ffffff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .user-role-badge {
+      font-size: 11px;
+      color: #a5b4fc;
+      font-weight: 500;
+    }
+
+    /* Main Content Area */
+    .main-wrapper {
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      overflow-y: auto;
+    }
+
+    /* Top Header */
+    .top-header {
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 36px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 90;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .mobile-toggle {
+      display: none;
+      background: none;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+      color: var(--text);
+    }
+
+    .header-title-block h1 {
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: -0.6px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .pulse-indicator {
+      width: 10px;
+      height: 10px;
+      background: #10b981;
+      border-radius: 50%;
+      box-shadow: 0 0 10px #10b981;
+      animation: livePulse 2s infinite;
+    }
+
+    @keyframes livePulse {
+
+      0%,
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+
+      50% {
+        opacity: 0.5;
+        transform: scale(1.4);
+      }
+    }
+
+    .header-title-block p {
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .db-status-pill {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #047857;
+      background: #ecfdf5;
+      padding: 6px 12px;
+      border-radius: 9999px;
+      border: 1px solid #a7f3d0;
+    }
+
+    .notification-btn {
+      position: relative;
+      background: #f1f5f9;
+      border: 1.5px solid var(--border);
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .notification-btn:hover {
+      background: #e2e8f0;
+      transform: scale(1.05);
+    }
+
+    .badge-counter {
+      position: absolute;
+      top: -4px;
+      right: -4px;
+      background: var(--danger);
+      color: white;
+      font-size: 10px;
+      font-weight: 800;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid #ffffff;
+      animation: bounceNotification 2.5s infinite;
+    }
+
+    @keyframes bounceNotification {
+
+      0%,
+      100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-3px);
+      }
+    }
+
+    .btn-quick-action {
+      background: var(--primary-gradient);
+      color: #ffffff;
+      padding: 10px 18px;
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: 700;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 4px 15px rgba(99, 102, 241, 0.35);
+      transition: all 0.3s var(--ease-spring);
+    }
+
+    .btn-quick-action:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(99, 102, 241, 0.45);
+    }
+
+    /* Dashboard Content */
+    .dashboard-content {
+      padding: 34px 36px;
+      max-width: 1480px;
+      width: 100%;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+    }
+
+    /* KPI Grid */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 20px;
+    }
+
+    .kpi-card {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      padding: 24px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: all 0.3s var(--ease-spring);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .kpi-card::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+      background: var(--primary);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .kpi-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .kpi-card:hover::after {
+      opacity: 1;
+    }
+
+    .kpi-info h3 {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      margin-bottom: 6px;
+    }
+
+    .kpi-number {
+      font-size: 34px;
+      font-weight: 900;
+      color: var(--text);
+      letter-spacing: -1px;
+    }
+
+    .kpi-trend {
+      font-size: 12px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      margin-top: 6px;
+    }
+
+    .trend-up {
+      color: var(--success);
+    }
+
+    .trend-down {
+      color: var(--danger);
+    }
+
+    .trend-neutral {
+      color: var(--muted);
+    }
+
+    .kpi-icon-wrap {
+      width: 56px;
+      height: 56px;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 26px;
+      transition: transform 0.3s var(--ease-spring);
+    }
+
+    .kpi-card:hover .kpi-icon-wrap {
+      transform: scale(1.1) rotate(5deg);
+    }
+
+    .icon-indigo {
+      background: #e0e7ff;
+      color: #4338ca;
+    }
+
+    .icon-blue {
+      background: #dbeafe;
+      color: #1d4ed8;
+    }
+
+    .icon-green {
+      background: #dcfce7;
+      color: #15803d;
+    }
+
+    .icon-amber {
+      background: #fef3c7;
+      color: #b45309;
+    }
+
+    /* Middle Section: Chart & Ongoing Projects */
+    .grid-two-col {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 24px;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      padding: 26px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      transition: all 0.3s ease;
+    }
+
+    .card:hover {
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.06);
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 22px;
+    }
+
+    .card-title {
+      font-size: 17px;
+      font-weight: 800;
+      letter-spacing: -0.4px;
+    }
+
+    .card-subtitle {
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    .chart-container {
+      position: relative;
+      height: 300px;
+      width: 100%;
+    }
+
+    /* Ongoing Projects List */
+    .project-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .project-item {
+      padding: 14px 16px;
+      border-radius: 12px;
+      border: 1.5px solid var(--border);
+      transition: all 0.25s var(--ease-spring);
+      cursor: pointer;
+      background: #fafafa;
+    }
+
+    .project-item:hover {
+      background: #ffffff;
+      border-color: #a5b4fc;
+      transform: translateX(4px);
+      box-shadow: 0 6px 18px rgba(99, 102, 241, 0.1);
+    }
+
+    .project-item-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .project-item-name {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .project-item-pct {
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--primary);
+    }
+
+    .progress-bar-container {
+      width: 100%;
+      height: 8px;
+      background: #e2e8f0;
+      border-radius: 9999px;
+      overflow: hidden;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      border-radius: 9999px;
+      transition: width 0.8s var(--ease-spring);
+      background-size: 200% 100%;
+    }
+
+    .fill-indigo {
+      background: linear-gradient(90deg, #4f46e5, #6366f1);
+    }
+
+    .fill-purple {
+      background: linear-gradient(90deg, #7c3aed, #a855f7);
+    }
+
+    .fill-amber {
+      background: linear-gradient(90deg, #d97706, #f59e0b);
+    }
+
+    .fill-green {
+      background: linear-gradient(90deg, #059669, #10b981);
+    }
+
+    /* Bottom Row */
+    .grid-bottom {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 24px;
+    }
+
+    /* Tasks Table */
+    .table-responsive {
+      overflow-x: auto;
+    }
+
+    .custom-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+
+    .custom-table th {
+      padding: 12px 16px;
+      background: #f8fafc;
+      color: var(--muted);
+      font-weight: 700;
+      text-transform: uppercase;
+      font-size: 11px;
+      letter-spacing: 0.6px;
+      border-bottom: 1.5px solid var(--border);
+    }
+
+    .custom-table td {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border);
+      color: var(--text);
+      vertical-align: middle;
+      transition: background 0.2s;
+    }
+
+    .custom-table tr:hover td {
+      background: #f8fafc;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 4px 10px;
+      border-radius: 9999px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .badge-success {
+      background: #dcfce7;
+      color: #15803d;
+    }
+
+    .badge-warning {
+      background: #fef3c7;
+      color: #b45309;
+    }
+
+    .badge-danger {
+      background: #fee2e2;
+      color: #b91c1c;
+    }
+
+    .badge-info {
+      background: #e0e7ff;
+      color: #4338ca;
+    }
+
+    /* Alerts Feed */
+    .alert-feed {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .alert-item {
+      padding: 16px;
+      border-radius: 12px;
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+      border: 1px solid;
+      transition: all 0.25s var(--ease-spring);
+    }
+
+    .alert-item:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.05);
+    }
+
+    .alert-item-danger {
+      background: linear-gradient(135deg, #fef2f2 0%, #fff1f2 100%);
+      border-color: #fecaca;
+      color: #991b1b;
+    }
+
+    .alert-item-warning {
+      background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+      border-color: #fde68a;
+      color: #92400e;
+    }
+
+    .alert-item-info {
+      background: linear-gradient(135deg, #eff6ff 0%, #e0e7ff 100%);
+      border-color: #dbeafe;
+      color: #1e40af;
+    }
+
+    .alert-icon {
+      font-size: 20px;
+    }
+
+    .alert-title {
+      font-size: 13px;
+      font-weight: 800;
+      margin-bottom: 3px;
+    }
+
+    .alert-desc {
+      font-size: 12px;
+      line-height: 1.5;
+      opacity: 0.95;
+    }
+
+    /* Settings Modal */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(9, 13, 22, 0.6);
+      backdrop-filter: blur(8px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+
+    .modal-box {
+      background: #ffffff;
+      width: 90%;
+      max-width: 500px;
+      border-radius: 20px;
+      padding: 28px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .modal-title {
+      font-size: 20px;
+      font-weight: 800;
+    }
+
+    .modal-close {
+      background: none;
+      border: none;
+      font-size: 22px;
+      cursor: pointer;
+      color: var(--muted);
+    }
+
+    @media (max-width: 1024px) {
+
+      .grid-two-col,
+      .grid-bottom {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .sidebar {
+        position: fixed;
+        left: -270px;
+        top: 0;
+        bottom: 0;
+      }
+
+      .sidebar.open {
+        left: 0;
+      }
+
+      .mobile-toggle {
+        display: block;
+      }
+
+      .top-header {
+        padding: 14px 20px;
+      }
+
+      .dashboard-content {
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Navigation Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-logo-icon">⚡</div>
+      <div>
+        <div class="brand-title">ProjectPulse</div>
+        <div class="brand-subtitle">Monitor. Manage. Deliver.</div>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <div class="nav-label">Navigation</div>
+      <a href="index.html" class="nav-link active">
+        <span class="nav-icon">📊</span>
+        <span>Dashboard</span>
+      </a>
+      <a href="projects.html" class="nav-link">
+        <span class="nav-icon">📁</span>
+        <span>Projects</span>
+      </a>
+      <a href="copilot.html" class="nav-link">
+        <span class="nav-icon">🤖</span>
+        <span>PulseAI Copilot</span>
+        <span
+          style="margin-left: auto; font-size: 10px; background: rgba(99, 102, 241, 0.25); color: #a5b4fc; padding: 2px 7px; border-radius: 999px; font-weight: 700;">AI</span>
+      </a>
+      <a href="project-details.html" class="nav-link">
+        <span class="nav-icon">🎯</span>
+        <span>Tasks & Milestones</span>
+      </a>
+      <a href="team.html" class="nav-link">
+        <span class="nav-icon">👥</span>
+        <span>Team Members</span>
+      </a>
+      <a href="reports.html" class="nav-link">
+        <span class="nav-icon">📈</span>
+        <span>Reports</span>
+      </a>
+      <a href="risk-monitor.html" class="nav-link">
+        <span class="nav-icon">⚠️</span>
+        <span>Risk Monitor</span>
+      </a>
+
+      <div class="nav-label">Preferences</div>
+      <a href="#" class="nav-link" onclick="openSettingsModal(); return false;">
+        <span class="nav-icon">⚙️</span>
+        <span>Settings</span>
+      </a>
+      <a href="#" class="nav-link" onclick="handleLogout(); return false;" style="color: #f87171;">
+        <span class="nav-icon">🚪</span>
+        <span>Logout</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="user-avatar-sm" id="sidebarAvatar">A</div>
+      <div class="user-meta-info">
+        <div class="user-name" id="sidebarUserName">Alex Rivera</div>
+        <div class="user-role-badge" id="sidebarUserRole">Administrator</div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main Content Wrapper -->
+  <div class="main-wrapper">
+    <!-- Header -->
+    <header class="top-header">
+      <div class="header-left">
+        <button class="mobile-toggle" onclick="toggleSidebar()">☰</button>
+        <div class="header-title-block">
+          <h1>
+            <span>Project Telemetry Overview</span>
+            <span class="pulse-indicator" title="Live Telemetry Sync Active"></span>
+          </h1>
+          <p>Real-time milestone progress, financial burn rate, and AI risk prediction.</p>
+        </div>
+      </div>
+
+      <div class="header-right">
+        <div class="db-status-pill">
+          <span>●</span>
+          <span>SQLite Connected</span>
+        </div>
+        <button class="notification-btn" title="View Notifications" onclick="showNotificationAlert()">
+          🔔
+          <span class="badge-counter">3</span>
+        </button>
+        <a href="projects.html" class="btn-quick-action">
+          <span>+</span>
+          <span>Add Project</span>
+        </a>
+      </div>
+    </header>
+
+    <!-- Main Body -->
+    <main class="dashboard-content">
+      <!-- 4 Top KPI Cards with Counter Animation -->
+      <section class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-info">
+            <h3>Total Projects</h3>
+            <div class="kpi-number" id="kpiTotal">0</div>
+            <div class="kpi-trend trend-up">Your accessible project portfolio</div>
+          </div>
+          <div class="kpi-icon-wrap icon-indigo">📁</div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-info">
+            <h3>Active Projects</h3>
+            <div class="kpi-number" id="kpiActive">0</div>
+            <div class="kpi-trend trend-neutral">Currently in progress</div>
+          </div>
+          <div class="kpi-icon-wrap icon-blue">⚡</div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-info">
+            <h3>Completed Projects</h3>
+            <div class="kpi-number" id="kpiCompleted">0</div>
+            <div class="kpi-trend trend-up">Delivered projects</div>
+          </div>
+          <div class="kpi-icon-wrap icon-green">🏆</div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-info">
+            <h3>Delayed Projects</h3>
+            <div class="kpi-number" id="kpiDelayed" style="color: var(--danger);">0</div>
+            <div class="kpi-trend trend-down">Projects needing attention</div>
+          </div>
+          <div class="kpi-icon-wrap icon-amber">⏱️</div>
+        </div>
+      </section>
+
+      <!-- Middle Grid: Chart + Ongoing Projects -->
+      <section class="grid-two-col">
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">Planned vs Actual Progress Velocity</div>
+              <div class="card-subtitle">Aggregated milestone progression trajectory across active enterprise systems
+                (2026)</div>
+            </div>
+          </div>
+          <div class="chart-container">
+            <canvas id="progressChart"></canvas>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">Ongoing Projects</div>
+              <div class="card-subtitle">Live execution telemetry</div>
+            </div>
+            <a href="projects.html"
+              style="font-size: 13px; color: var(--primary); text-decoration: none; font-weight: 700;">Explore All →</a>
+          </div>
+
+          <div class="project-list" id="ongoingProjectsList">
+            <div class="project-item">Loading projects...</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Bottom Grid: Recent Tasks Table + Important Alerts -->
+      <section class="grid-bottom" id="adminActivityPanels" style="display: none;">
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">Recent Tasks & Milestones</div>
+              <div class="card-subtitle">Key sprint deliverables updated within the last 48 hours</div>
+            </div>
+          </div>
+
+          <div class="table-responsive">
+            <table class="custom-table">
+              <thead>
+                <tr>
+                  <th>Milestone / Task</th>
+                  <th>Project</th>
+                  <th>Due Date</th>
+                  <th>Priority</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>IoT Gateways Integration</strong></td>
+                  <td>Smart City Monitoring</td>
+                  <td>Oct 04, 2026</td>
+                  <td><span class="badge badge-danger">High</span></td>
+                  <td><span class="badge badge-success">Completed</span></td>
+                </tr>
+                <tr>
+                  <td><strong>HIPAA Compliance Audit</strong></td>
+                  <td>AI Healthcare Assistant</td>
+                  <td>Oct 12, 2026</td>
+                  <td><span class="badge badge-warning">Medium</span></td>
+                  <td><span class="badge badge-info">In Progress</span></td>
+                </tr>
+                <tr>
+                  <td><strong>Database Schema Migration</strong></td>
+                  <td>Campus ERP Upgrade</td>
+                  <td>Sep 15, 2026</td>
+                  <td><span class="badge badge-danger">Critical</span></td>
+                  <td><span class="badge badge-danger">Delayed</span></td>
+                </tr>
+                <tr>
+                  <td><strong>Sensor Hardware Telemetry</strong></td>
+                  <td>Water Quality Analytics</td>
+                  <td>Nov 01, 2026</td>
+                  <td><span class="badge badge-info">Normal</span></td>
+                  <td><span class="badge badge-warning">Planned</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">Important Alerts</div>
+              <div class="card-subtitle">Critical signals requiring action</div>
+            </div>
+            <a href="risk-monitor.html"
+              style="font-size: 13px; color: var(--danger); text-decoration: none; font-weight: 700;">Risk Hub →</a>
+          </div>
+
+          <div class="alert-feed">
+            <div class="alert-item alert-item-danger">
+              <span class="alert-icon">⚠️</span>
+              <div>
+                <div class="alert-title">Campus ERP Milestone Overdue</div>
+                <div class="alert-desc">Database migration delayed by 11 days. Backend contractor capacity exceeded.
+                </div>
+              </div>
+            </div>
+
+            <div class="alert-item alert-item-warning">
+              <span class="alert-icon">⚡</span>
+              <div>
+                <div class="alert-title">AI Healthcare Budget Threshold</div>
+                <div class="alert-desc">Cloud GPU compute consumption has reached 82% of allocated Q3 budget.</div>
+              </div>
+            </div>
+
+            <div class="alert-item alert-item-info">
+              <span class="alert-icon">ℹ️</span>
+              <div>
+                <div class="alert-title">Scheduled Release Window</div>
+                <div class="alert-desc">Digital Library Portal final documentation ready for sign-off.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Settings Modal -->
+  <div class="modal-overlay" id="settingsModal">
+    <div class="modal-box">
+      <div class="modal-header">
+        <div class="modal-title">System Settings</div>
+        <button class="modal-close" onclick="closeSettingsModal()">✕</button>
+      </div>
+      <p style="font-size: 14px; color: var(--muted); margin-bottom: 20px;">Configure your ProjectPulse monitoring
+        preferences.</p>
+
+      <div style="display: flex; flex-direction: column; gap: 14px; font-size: 14px;">
+        <label
+          style="display: flex; align-items: center; justify-content: space-between; padding: 12px; background: #f8fafc; border-radius: 10px;">
+          <span>Automated Daily Delay Digest</span>
+          <input type="checkbox" checked style="accent-color: var(--primary);">
+        </label>
+        <label
+          style="display: flex; align-items: center; justify-content: space-between; padding: 12px; background: #f8fafc; border-radius: 10px;">
+          <span>AI Risk Prediction Alerts</span>
+          <input type="checkbox" checked style="accent-color: var(--primary);">
+        </label>
+        <label
+          style="display: flex; align-items: center; justify-content: space-between; padding: 12px; background: #f8fafc; border-radius: 10px;">
+          <span>SQLite Database Sync Logging</span>
+          <input type="checkbox" checked style="accent-color: var(--primary);">
+        </label>
+      </div>
+
+      <div style="margin-top: 24px; display: flex; justify-content: flex-end; gap: 10px;">
+        <button onclick="closeSettingsModal()"
+          style="padding: 10px 18px; border: 1px solid var(--border); background: white; border-radius: 10px; cursor: pointer; font-weight: 600;">Cancel</button>
+        <button onclick="saveSettings()"
+          style="padding: 10px 20px; background: var(--primary-gradient); color: white; border: none; border-radius: 10px; cursor: pointer; font-weight: 700;">Save
+          Preferences</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="api.js"></script>
+  <script>
+    // Authentication Check
+    let currentUser = null;
+    const storedUser = localStorage.getItem('projectPulseUser');
+    if (!storedUser) {
+      window.location.href = 'login.html';
+    } else {
+      currentUser = JSON.parse(storedUser);
+      document.getElementById('sidebarUserName').textContent = currentUser.name || 'User';
+      document.getElementById('sidebarUserRole').textContent = currentUser.role || 'Member';
+      document.getElementById('sidebarAvatar').textContent = (currentUser.name || 'U').charAt(0);
+    }
+
+    function handleLogout() {
+      if (confirm('Are you sure you want to sign out from ProjectPulse?')) {
+        localStorage.removeItem('projectPulseUser');
+        window.location.href = 'login.html';
+      }
+    }
+
+    function toggleSidebar() {
+      document.getElementById('sidebar').classList.toggle('open');
+    }
+
+    function showNotificationAlert() {
+      alert("🔔 ProjectPulse Notification Feed:\n\n1. Campus ERP Upgrade: Critical delay on database migration.\n2. AI Healthcare Assistant: Budget utilization reached 82%.\n3. Smart City Monitoring: Milestone review scheduled tomorrow at 10:00 AM.");
+    }
+
+    function openSettingsModal() {
+      document.getElementById('settingsModal').style.display = 'flex';
+    }
+
+    function closeSettingsModal() {
+      document.getElementById('settingsModal').style.display = 'none';
+    }
+
+    function saveSettings() {
+      alert('Preferences saved successfully!');
+      closeSettingsModal();
+    }
+
+    function selectAndNavigate(projectId) {
+      const projects = JSON.parse(localStorage.getItem('projectPulseProjects') || '[]');
+      const selected = projects.find(p => p.id === projectId);
+      if (selected) {
+        localStorage.setItem('projectPulseSelectedProject', JSON.stringify(selected));
+      }
+      window.location.href = `project-details.html?id=${projectId}`;
+    }
+
+    // Number counting animation
+    function animateValue(id, start, end, duration) {
+      const obj = document.getElementById(id);
+      if (!obj) return;
+      let startTimestamp = null;
+      const step = (timestamp) => {
+        if (!startTimestamp) startTimestamp = timestamp;
+        const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+        obj.innerHTML = Math.floor(progress * (end - start) + start);
+        if (progress < 1) {
+          window.requestAnimationFrame(step);
+        }
+      };
+      window.requestAnimationFrame(step);
+    }
+
+    function renderDashboardProjects(projects) {
+      const total = projects.length;
+      const active = projects.filter(project => project.status === 'In Progress').length;
+      const completed = projects.filter(project => project.status === 'Completed').length;
+      const delayed = projects.filter(project => project.status === 'Delayed').length;
+
+      document.getElementById('kpiTotal').textContent = total;
+      document.getElementById('kpiActive').textContent = active;
+      document.getElementById('kpiCompleted').textContent = completed;
+      document.getElementById('kpiDelayed').textContent = delayed;
+
+      const projectList = document.getElementById('ongoingProjectsList');
+      projectList.replaceChildren();
+      const ongoing = projects.filter(project => project.status !== 'Completed').slice(0, 4);
+
+      if (ongoing.length === 0) {
+        const emptyMessage = document.createElement('div');
+        emptyMessage.className = 'project-item';
+        emptyMessage.textContent = 'No projects in your portfolio yet.';
+        projectList.appendChild(emptyMessage);
+        return;
+      }
+
+      const progressClasses = ['fill-indigo', 'fill-purple', 'fill-amber', 'fill-green'];
+      ongoing.forEach((project, index) => {
+        const item = document.createElement('div');
+        item.className = 'project-item';
+        item.onclick = () => selectAndNavigate(project.id);
+
+        const itemTop = document.createElement('div');
+        itemTop.className = 'project-item-top';
+        const name = document.createElement('span');
+        name.className = 'project-item-name';
+        name.textContent = project.name;
+        const progress = Number(project.progress) || 0;
+        const status = document.createElement('span');
+        status.className = 'project-item-pct';
+        status.textContent = project.status === 'Delayed' ? `${progress}% (Delayed)` : `${progress}%`;
+        if (project.status === 'Delayed') status.style.color = 'var(--danger)';
+        itemTop.append(name, status);
+
+        const bar = document.createElement('div');
+        bar.className = 'progress-bar-container';
+        const fill = document.createElement('div');
+        fill.className = `progress-bar-fill ${progressClasses[index % progressClasses.length]}`;
+        fill.style.width = `${Math.max(0, Math.min(100, progress))}%`;
+        bar.appendChild(fill);
+        item.append(itemTop, bar);
+        projectList.appendChild(item);
+      });
+    }
+
+    // Initialize Chart.js with high-level gradient
+    window.addEventListener('DOMContentLoaded', async () => {
+      const activityPanels = document.getElementById('adminActivityPanels');
+      if (currentUser && currentUser.role === 'Administrator') {
+        activityPanels.style.display = '';
+      }
+
+      const projects = window.ProjectPulseAPI ? await window.ProjectPulseAPI.getProjects() : [];
+      renderDashboardProjects(projects);
+
+      const ctx = document.getElementById('progressChart').getContext('2d');
+      const gradient = ctx.createLinearGradient(0, 0, 0, 300);
+      gradient.addColorStop(0, 'rgba(99, 102, 241, 0.35)');
+      gradient.addColorStop(1, 'rgba(99, 102, 241, 0.0)');
+
+      new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'],
+          datasets: [
+            {
+              label: 'Planned Progress (%)',
+              data: [15, 28, 42, 55, 68, 75, 84, 90, 95],
+              borderColor: '#94a3b8',
+              backgroundColor: 'transparent',
+              borderDash: [5, 5],
+              borderWidth: 2,
+              pointRadius: 3,
+              tension: 0.35
+            },
+            {
+              label: 'Actual Progress (%)',
+              data: [14, 25, 38, 48, 62, 69, 74, 78, 81],
+              borderColor: '#6366f1',
+              backgroundColor: gradient,
+              borderWidth: 3.5,
+              pointRadius: 5,
+              pointHoverRadius: 8,
+              pointBackgroundColor: '#ffffff',
+              pointBorderColor: '#6366f1',
+              pointBorderWidth: 3,
+              fill: true,
+              tension: 0.35
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              position: 'top',
+              labels: {
+                font: { family: 'Inter', size: 12, weight: '600' },
+                usePointStyle: true,
+                boxWidth: 8
+              }
+            },
+            tooltip: {
+              backgroundColor: '#090d16',
+              titleFont: { family: 'Inter', size: 13, weight: '700' },
+              bodyFont: { family: 'Inter', size: 12 },
+              padding: 12,
+              cornerRadius: 10,
+              boxPadding: 4
+            }
+          },
+          scales: {
+            y: {
+              min: 0,
+              max: 100,
+              ticks: {
+                callback: function (value) { return value + '%'; },
+                font: { family: 'Inter', size: 11, weight: '500' },
+                color: '#64748b'
+              },
+              grid: { color: '#f1f5f9' }
+            },
+            x: {
+              ticks: { font: { family: 'Inter', size: 11, weight: '500' }, color: '#64748b' },
+              grid: { display: false }
+            }
+          }
+        }
+      });
+    });
+  </script>
+</body>
+
+</html>
